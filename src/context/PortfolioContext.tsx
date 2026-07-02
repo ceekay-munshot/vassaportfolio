@@ -152,9 +152,7 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
       const holds = prev.holdings.map((h) => {
         if (h.vehicle === "Mutual Fund") return h;
         const q = quotes[h.apiTicker ?? h.ticker];
-        return q
-          ? repriceHolding(h, q.currentPrice, q.previousClose)
-          : { ...h, priceStatus: "unresolved" as const };
+        return q ? repriceHolding(h, q) : { ...h, priceStatus: "unresolved" as const };
       });
       const weighted = withWeights(holds);
       const nav = weighted.reduce((s, h) => s + (h.marketValueBase ?? h.marketValue), 0);
