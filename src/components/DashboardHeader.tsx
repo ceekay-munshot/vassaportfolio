@@ -45,12 +45,12 @@ export function DashboardHeader() {
   const active = activeHoldings(portfolio);
   const sectors = distinctSectors(portfolio).filter((s) => s !== "Unclassified");
   const nav = portfolio.totalValue;
-  const invested = portfolio.holdings
-    .filter((h) => !h.costUnknown)
-    .reduce((s, h) => s + (h.costBasisBase ?? h.costBasis), 0);
-  const pnl = portfolio.holdings
-    .filter((h) => !h.costUnknown)
-    .reduce((s, h) => s + (h.unrealizedPnLBase ?? h.unrealizedPnL), 0);
+  // Exclude Exited rows so Invested / P&L line up with NAV (which already
+  // excludes them) — otherwise a book with realized exits mixes sold-position
+  // cost/P&L into the live strip.
+  const activeCost = portfolio.holdings.filter((h) => h.status !== "Exited" && !h.costUnknown);
+  const invested = activeCost.reduce((s, h) => s + (h.costBasisBase ?? h.costBasis), 0);
+  const pnl = activeCost.reduce((s, h) => s + (h.unrealizedPnLBase ?? h.unrealizedPnL), 0);
   const pnlPct = invested > 0 ? (pnl / invested) * 100 : 0;
 
   return (

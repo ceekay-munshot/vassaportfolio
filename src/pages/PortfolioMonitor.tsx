@@ -134,9 +134,9 @@ export function PortfolioMonitor() {
                   <td className="px-3 py-3 text-slate-400">{h.sector}</td>
                   <td className="px-3 py-3 text-right mono text-slate-300">{fmtNum(h.quantity)}</td>
                   <td className="px-3 py-3 text-right mono text-slate-400">
-                    {h.costUnknown ? <span className="text-slate-500">{DASH}</span> : fmtCurrency(h.averageCost, "INR")}
+                    {h.costUnknown ? <span className="text-slate-500">{DASH}</span> : fmtCurrency(h.averageCost, h.currency ?? "INR")}
                   </td>
-                  <td className="px-3 py-3 text-right mono text-slate-200">{fmtCurrency(h.currentPrice, "INR")}</td>
+                  <td className="px-3 py-3 text-right mono text-slate-200">{fmtCurrency(h.currentPrice, h.currency ?? "INR")}</td>
                   <td className={`px-3 py-3 text-right mono ${h.costUnknown ? "text-slate-500" : changeColor(h.returnPct)}`}>
                     {h.costUnknown ? DASH : fmtPct(h.returnPct, { sign: true })}
                   </td>
