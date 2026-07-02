@@ -8,6 +8,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import type {
@@ -35,7 +36,8 @@ import { fmtCurrency } from "@/lib/format";
 // no upload / no backend. See src/data/mockPortfolio.ts. To restore the
 // original "upload-first" behavior, drop this import and the two `?? MOCK_*`
 // fallbacks in the initial state below.
-import { MOCK_PORTFOLIO, MOCK_UPLOADS } from "@/data/mockPortfolio";
+import { MOCK_PORTFOLIO, MOCK_UPLOADS, repriceHolding, withWeights } from "@/data/mockPortfolio";
+import { fetchQuotes } from "@/lib/priceService";
 
 const DISPLAY_CCY_KEY = "fo:displayCurrency";
 
@@ -76,6 +78,13 @@ type PortfolioContextValue = {
   setDisplayCurrency: (c: DisplayCurrency) => void;
   convertFromBase: (amount: number) => number;             // base ccy -> display ccy
   fmtFromBase: (amount: number, opts?: { compact?: boolean; sign?: boolean }) => string;
+
+  // Live pricing (Munshot stock API). Prices are fetched on load and on demand;
+  // holdings without a resolvable quote (e.g. mutual funds) keep priceStatus
+  // "unresolved" and are valued at cost.
+  pricesAsOf: string | null;
+  pricesLoading: boolean;
+  refreshPrices: () => void;
 };
 
 const PortfolioContext = createContext<PortfolioContextValue | null>(null);
@@ -116,6 +125,49 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
       fmtCurrency(fxConvert(amount, baseCurrency, displayCurrency), displayCurrency, opts),
     [baseCurrency, displayCurrency],
   );
+
+  // --- Live prices (Munshot stock API) --------------------------------------
+  const [pricesAsOf, setPricesAsOf] = useState<string | null>(null);
+  const [pricesLoading, setPricesLoading] = useState(false);
+  const portfolioRef = useRef(portfolio);
+  useEffect(() => {
+    portfolioRef.current = portfolio;
+  }, [portfolio]);
+
+  const refreshPrices = useCallback(async () => {
+    const pf = portfolioRef.current;
+    if (!pf) return;
+    setPricesLoading(true);
+    // Mutual funds can't be priced by the stock API — skip them (kept at cost).
+    const symbols = Array.from(
+      new Set(
+        pf.holdings
+          .filter((h) => h.vehicle !== "Mutual Fund")
+          .map((h) => h.apiTicker ?? h.ticker),
+      ),
+    );
+    const quotes = await fetchQuotes(symbols);
+    setPortfolio((prev) => {
+      if (!prev) return prev;
+      const holds = prev.holdings.map((h) => {
+        if (h.vehicle === "Mutual Fund") return h;
+        const q = quotes[h.apiTicker ?? h.ticker];
+        return q
+          ? repriceHolding(h, q.currentPrice, q.previousClose)
+          : { ...h, priceStatus: "unresolved" as const };
+      });
+      const weighted = withWeights(holds);
+      const nav = weighted.reduce((s, h) => s + (h.marketValueBase ?? h.marketValue), 0);
+      return { ...prev, holdings: weighted, totalValue: nav };
+    });
+    setPricesAsOf(new Date().toISOString());
+    setPricesLoading(false);
+  }, []);
+
+  // Fetch live prices once on load.
+  useEffect(() => {
+    refreshPrices();
+  }, [refreshPrices]);
 
   // Keep localStorage in sync with state changes (paranoia — every setter
   // also writes, but this catches edge cases like programmatic resets).
@@ -241,6 +293,9 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
       setDisplayCurrency,
       convertFromBase,
       fmtFromBase,
+      pricesAsOf,
+      pricesLoading,
+      refreshPrices,
     }),
     [
       portfolio,
@@ -256,6 +311,9 @@ export function PortfolioProvider({ children }: { children: React.ReactNode }) {
       setDisplayCurrency,
       convertFromBase,
       fmtFromBase,
+      pricesAsOf,
+      pricesLoading,
+      refreshPrices,
     ],
   );
 

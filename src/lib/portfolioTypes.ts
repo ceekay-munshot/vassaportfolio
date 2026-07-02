@@ -83,6 +83,11 @@ export type Holding = {
   costSource?: string;        // where the cost basis came from ("Zerodha", …)
   costUnknown?: boolean;      // in custody but no cost record → avg cost / P&L not shown
 
+  // --- Live pricing (from the Munshot stock API) ----------------------------
+  apiTicker?: string;         // symbol to query if it differs from `ticker` (DCB → DCBBANK)
+  prevClose?: number;         // previous close, for the day-change figure
+  priceStatus?: "live" | "unresolved"; // did the live feed price this holding?
+
   // Derived for the dashboard (computed in the parser, not user-supplied).
   unrealizedPnL: number;      // qty * (currentPrice - averageCost) — native currency
   returnPct: number;          // (currentPrice - averageCost) / averageCost * 100

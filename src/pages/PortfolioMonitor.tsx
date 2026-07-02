@@ -116,7 +116,9 @@ export function PortfolioMonitor() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/70">
-              {rows.map((h) => (
+              {rows.map((h) => {
+                const priceNA = h.priceStatus === "unresolved";
+                return (
                 <tr key={h.isin ?? h.ticker} className="group text-sm hover:bg-slate-800/30">
                   <td className="sticky left-0 z-10 bg-ink-800 px-3 py-3 group-hover:bg-ink-700">
                     <div className="flex items-center gap-2">
@@ -136,13 +138,16 @@ export function PortfolioMonitor() {
                   <td className="px-3 py-3 text-right mono text-slate-400">
                     {h.costUnknown ? <span className="text-slate-500">{DASH}</span> : fmtCurrency(h.averageCost, h.currency ?? "INR")}
                   </td>
-                  <td className="px-3 py-3 text-right mono text-slate-200">{fmtCurrency(h.currentPrice, h.currency ?? "INR")}</td>
-                  <td className={`px-3 py-3 text-right mono ${h.costUnknown ? "text-slate-500" : changeColor(h.returnPct)}`}>
-                    {h.costUnknown ? DASH : fmtPct(h.returnPct, { sign: true })}
+                  <td className="px-3 py-3 text-right mono text-slate-200">
+                    {fmtCurrency(h.currentPrice, h.currency ?? "INR")}
+                    {priceNA && <div className="text-[10px] text-amber-500">NAV not live</div>}
+                  </td>
+                  <td className={`px-3 py-3 text-right mono ${h.costUnknown || priceNA ? "text-slate-500" : changeColor(h.returnPct)}`}>
+                    {h.costUnknown || priceNA ? DASH : fmtPct(h.returnPct, { sign: true })}
                   </td>
                   <td className="px-3 py-3 text-right mono text-slate-100">{fmtFromBase(mv(h), { compact: true })}</td>
-                  <td className={`px-3 py-3 text-right mono ${h.costUnknown ? "text-slate-500" : changeColor(pnl(h))}`}>
-                    {h.costUnknown ? DASH : fmtFromBase(pnl(h), { compact: true, sign: true })}
+                  <td className={`px-3 py-3 text-right mono ${h.costUnknown || priceNA ? "text-slate-500" : changeColor(pnl(h))}`}>
+                    {h.costUnknown || priceNA ? DASH : fmtFromBase(pnl(h), { compact: true, sign: true })}
                   </td>
                   <td className="px-3 py-3 text-right">
                     <div className="mono text-slate-200">{(h.portfolioWeight * 100).toFixed(1)}%</div>
@@ -151,7 +156,8 @@ export function PortfolioMonitor() {
                     </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
               {rows.length === 0 && (
                 <tr>
                   <td colSpan={10} className="px-3 py-8 text-center text-xs text-slate-500">

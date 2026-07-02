@@ -12,13 +12,18 @@ import {
   TrendingUp,
   Landmark,
   Layers,
+  RefreshCw,
 } from "lucide-react";
 import { usePortfolio, activeHoldings, distinctSectors } from "@/context/PortfolioContext";
 import { changeColor, fmtDateTime, fmtPct } from "@/lib/format";
 
+function fmtClock(iso: string): string {
+  return new Date(iso).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+}
+
 export function DashboardHeader() {
   const navigate = useNavigate();
-  const { portfolio, clearPortfolio, fmtFromBase } = usePortfolio();
+  const { portfolio, clearPortfolio, fmtFromBase, pricesAsOf, pricesLoading, refreshPrices } = usePortfolio();
   const [showConfirm, setShowConfirm] = useState(false);
 
   // Pre-upload variant: thin teaser strip that tells the user what's missing.
@@ -64,9 +69,23 @@ export function DashboardHeader() {
               <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-slate-500">
                 <span>Consolidated Book</span>
                 <span className="text-slate-700">·</span>
-                <span>Updated <span className="text-slate-300">{fmtDateTime(portfolio.uploadedAt)}</span></span>
+                <span>Holdings as of <span className="text-slate-300">{fmtDateTime(portfolio.uploadedAt)}</span></span>
                 <span className="text-slate-700">·</span>
-                <span className="text-emerald-500">● Prices live</span>
+                {pricesLoading ? (
+                  <span className="inline-flex items-center gap-1 text-slate-400">
+                    <RefreshCw className="h-3 w-3 animate-spin" /> Fetching live prices…
+                  </span>
+                ) : pricesAsOf ? (
+                  <span className="inline-flex items-center gap-1 text-emerald-500">
+                    ● Prices live
+                    <span className="text-slate-500">· {fmtClock(pricesAsOf)}</span>
+                    <button onClick={refreshPrices} title="Refresh prices" className="ml-0.5 text-slate-400 hover:text-slate-200">
+                      <RefreshCw className="h-3 w-3" />
+                    </button>
+                  </span>
+                ) : (
+                  <span className="text-slate-500">○ Prices pending</span>
+                )}
               </div>
             </div>
           </div>
