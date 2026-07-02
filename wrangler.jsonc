@@ -1,0 +1,18 @@
+{
+  // Cloudflare Workers deploy config — serves the built Vite SPA as a static
+  // site (Workers static assets). Having this file present stops `wrangler
+  // deploy` from trying to auto-detect the framework (which requires Vite >= 6);
+  // instead it just runs the build below and uploads ./dist.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vassaportfolio",
+  "compatibility_date": "2025-06-01",
+  "build": {
+    // Runs before deploy so ./dist exists in the Cloudflare build container.
+    "command": "npm run build"
+  },
+  "assets": {
+    "directory": "./dist",
+    // Deep links (e.g. /monitor) fall back to index.html for client-side routing.
+    "not_found_handling": "single-page-application"
+  }
+}
