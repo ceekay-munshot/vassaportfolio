@@ -1,32 +1,15 @@
 import { NavLink } from "react-router-dom";
-import {
-  Upload,
-  Sunrise,
-  LineChart,
-  PieChart,
-  ShieldAlert,
-  FileText,
-  Sparkles,
-  Users,
-  Lock,
-  Plug,
-} from "lucide-react";
+import { Upload, LineChart, Lock } from "lucide-react";
 import { usePortfolio } from "@/context/PortfolioContext";
 
 // Tabs reachable even without a portfolio loaded.
 const ALWAYS_ACCESSIBLE = new Set(["/upload"]);
 
-// Trimmed to the screens that map to the NV objectives — no duplicate views.
+// Only screens running on REAL data are shown. Screens still on mock feeds are
+// hidden until rebuilt on real data (Risk & Leverage, Broker Research next).
 const NAV = [
   { to: "/upload", label: "Upload Portfolio", icon: Upload, group: "Setup" },
   { to: "/monitor", label: "Portfolio Monitor", icon: LineChart, group: "Daily" },
-  { to: "/cio", label: "Morning CIO", icon: Sunrise, group: "Daily" },
-  { to: "/sectors", label: "Sector Composition", icon: PieChart, group: "Allocation" },
-  { to: "/family", label: "Family & Entities", icon: Users, group: "Allocation" },
-  { to: "/risk", label: "Risk & Performance", icon: ShieldAlert, group: "Analytics" },
-  { to: "/research", label: "Broker Research", icon: FileText, group: "Intelligence" },
-  { to: "/recommendations", label: "Recommendations", icon: Sparkles, group: "Action" },
-  { to: "/data-sources", label: "Data Sources", icon: Plug, group: "Admin" },
 ] as const;
 
 export function Sidebar() {
