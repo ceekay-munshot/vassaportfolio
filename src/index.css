@@ -1,0 +1,243 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  /* Recharts tooltip — NV light (overridden in html.dark below) */
+  --chart-tooltip-bg: #ffffff;
+  --chart-tooltip-border: #dde6f5;
+  --chart-tooltip-text: #0f1f3d;
+  --chart-tooltip-muted: #3d5068;
+  --chart-tooltip-shadow: 0 8px 28px rgba(30, 92, 232, 0.12);
+}
+html.dark {
+  color-scheme: dark;
+  --chart-tooltip-bg: #0f1f3d;
+  --chart-tooltip-border: #16294d;
+  --chart-tooltip-text: #edf0f4;
+  --chart-tooltip-muted: #7a8fa6;
+  --chart-tooltip-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-feature-settings: "cv11", "ss01", "ss03";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* premium scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.3);
+}
+
+/* subtle grid background */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-slate-800 bg-ink-800 shadow-card;
+  }
+  .card-pad {
+    @apply card p-5;
+  }
+  .label-xs {
+    @apply text-[10px] font-medium uppercase tracking-[0.14em] text-slate-500;
+  }
+  .h-section {
+    @apply text-sm font-semibold text-slate-200;
+  }
+  .divider {
+    @apply border-t border-slate-800;
+  }
+  .ring-focus {
+    @apply focus:outline-none focus:ring-2 focus:ring-gold-500/40;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium ring-focus transition-colors;
+  }
+  .btn-primary {
+    @apply btn bg-gold-500 text-white hover:bg-gold-600;
+  }
+  .btn-ghost {
+    @apply btn border border-slate-700 bg-transparent text-slate-200 hover:bg-slate-800/60;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-800/60 px-2 py-0.5 text-[11px] font-medium text-slate-300;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   LIGHT MODE — NV Family Office (default)
+   ---------------------------------------------------------------------------
+   The dark theme uses the ink-* palette (navy tones from theme.nv.ts). In light
+   mode we remap those exact utility classes to a crisp white/blue-grey system
+   so the whole page — page background, sidebar, top bar, header strip, cards —
+   shifts to the NV brand look without rewriting components.
+
+   Palette:
+     #eef2fb  page base (soft blue-grey)
+     #ffffff  sidebar / top bar / header strip / cards
+     #f4f7fd  subtle inset elevations
+     #e6edf7  border subtle
+     #d3ddec  border default
+     #1e5ce8  electric-blue brand accent
+     #0f1f3d  text primary (deep navy)   #3d5068 secondary   #7a8fa6 muted
+   ----------------------------------------------------------------------- */
+
+html:not(.dark) {
+  color-scheme: light;
+}
+
+html:not(.dark) body {
+  background: #eef2fb;
+  color: #0f1f3d;
+}
+
+/* Page-level backgrounds (chassis: page, sidebar, top bar, header strip) */
+html:not(.dark) .bg-ink-950 { background-color: #eef2fb; }
+html:not(.dark) .bg-ink-900 { background-color: #ffffff; }
+html:not(.dark) .bg-ink-900\/85 { background-color: rgba(255, 255, 255, 0.9); }
+html:not(.dark) .bg-ink-900\/60 { background-color: rgba(255, 255, 255, 0.7); }
+html:not(.dark) .bg-ink-800 { background-color: #ffffff; }
+html:not(.dark) .bg-ink-800\/85 { background-color: rgba(255, 255, 255, 0.92); }
+html:not(.dark) .bg-ink-800\/60 { background-color: rgba(244, 247, 253, 0.8); }
+html:not(.dark) .bg-ink-800\/30 { background-color: rgba(244, 247, 253, 0.5); }
+html:not(.dark) .bg-ink-700 { background-color: #f4f7fd; }
+html:not(.dark) .bg-ink-700\/40 { background-color: rgba(244, 247, 253, 0.7); }
+html:not(.dark) .bg-ink-700\/30 { background-color: rgba(244, 247, 253, 0.55); }
+
+/* Slate backgrounds used for hover states and inner panels */
+html:not(.dark) .bg-slate-900 { background-color: #eef2fb; }
+html:not(.dark) .bg-slate-800 { background-color: #e8eef8; }
+html:not(.dark) .bg-slate-800\/80 { background-color: rgba(232, 238, 248, 0.9); }
+html:not(.dark) .bg-slate-800\/60 { background-color: rgba(232, 238, 248, 0.6); }
+html:not(.dark) .bg-slate-800\/40 { background-color: rgba(232, 238, 248, 0.5); }
+html:not(.dark) .bg-slate-800\/30 { background-color: rgba(30, 92, 232, 0.05); }
+html:not(.dark) .bg-slate-800\/20 { background-color: rgba(30, 92, 232, 0.04); }
+html:not(.dark) .bg-slate-700 { background-color: #d3ddec; }
+html:not(.dark) .bg-slate-700\/60 { background-color: rgba(211, 221, 236, 0.55); }
+html:not(.dark) .bg-slate-700\/40 { background-color: rgba(211, 221, 236, 0.4); }
+html:not(.dark) .bg-slate-700\/30 { background-color: rgba(211, 221, 236, 0.3); }
+
+/* Borders */
+html:not(.dark) .border-slate-700 { border-color: #d3ddec; }
+html:not(.dark) .border-slate-800 { border-color: #e6edf7; }
+html:not(.dark) .border-slate-800\/70 { border-color: rgba(230, 237, 247, 0.85); }
+html:not(.dark) .divide-slate-800 > * + *,
+html:not(.dark) .divide-slate-800\/70 > * + * { border-color: #e6edf7; }
+
+/* Text — remap slate greys to the navy/blue-grey scale */
+html:not(.dark) .text-slate-100 { color: #0f1f3d; }
+html:not(.dark) .text-slate-200 { color: #22345a; }
+html:not(.dark) .text-slate-300 { color: #3d5068; }
+html:not(.dark) .text-slate-400 { color: #56688a; }
+html:not(.dark) .text-slate-500 { color: #7a8fa6; }
+html:not(.dark) .text-slate-600 { color: #9aa9bd; }
+html:not(.dark) .text-slate-700 { color: #c3cee0; }
+
+/* Placeholders */
+html:not(.dark) .placeholder-slate-500::placeholder { color: #9aa9bd; }
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder { color: #9aa9bd; }
+
+/* Card */
+html:not(.dark) .card {
+  background-color: #ffffff;
+  border-color: #e6edf7;
+  color: #0f1f3d;
+  box-shadow: 0 1px 2px 0 rgba(30, 92, 232, 0.04), 0 10px 26px -14px rgba(15, 31, 61, 0.14);
+}
+
+/* Buttons */
+html:not(.dark) .btn-ghost {
+  border-color: #d3ddec;
+  color: #22345a;
+  background-color: #ffffff;
+}
+html:not(.dark) .btn-ghost:hover {
+  background-color: rgba(30, 92, 232, 0.06);
+}
+html:not(.dark) .btn-primary {
+  background-color: #1e5ce8;
+  color: #ffffff;
+}
+html:not(.dark) .btn-primary:hover {
+  background-color: #1751d0;
+  color: #ffffff;
+}
+
+/* Pills */
+html:not(.dark) .pill {
+  border-color: #d3ddec;
+  background-color: #ffffff;
+  color: #3d5068;
+}
+
+/* Grid background — faint blue tinted lines */
+html:not(.dark) .bg-grid {
+  background-image:
+    linear-gradient(rgba(30, 92, 232, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 92, 232, 0.045) 1px, transparent 1px);
+}
+
+/* Inputs, selects */
+html:not(.dark) input[type="text"],
+html:not(.dark) input[type="search"],
+html:not(.dark) input[type="file"],
+html:not(.dark) input[type="number"],
+html:not(.dark) select,
+html:not(.dark) textarea {
+  background-color: #ffffff;
+  border-color: #d3ddec;
+  color: #0f1f3d;
+}
+
+html:not(.dark) input[type="checkbox"] {
+  background-color: #ffffff;
+  border-color: #d3ddec;
+}
+
+/* Scrollbar */
+html:not(.dark) ::-webkit-scrollbar-thumb {
+  background: rgba(30, 92, 232, 0.18);
+}
+html:not(.dark) ::-webkit-scrollbar-thumb:hover {
+  background: rgba(30, 92, 232, 0.34);
+}
+
+/* Recharts tooltips read --chart-tooltip-* CSS variables (defined in :root +
+   html.dark above). Charts pass `chartTooltipStyle` from src/lib/chartTheme.ts
+   so a single source of truth controls bg/border/text across both themes. */
