@@ -7,7 +7,7 @@ import { MorningCIO } from "@/pages/MorningCIO";
 import { PortfolioMonitor } from "@/pages/PortfolioMonitor";
 import { CoreSatellite } from "@/pages/CoreSatellite";
 import { SectorComposition } from "@/pages/SectorComposition";
-import { RiskPerformance } from "@/pages/RiskPerformance";
+import { RiskLeverage } from "@/pages/RiskLeverage";
 import { BrokerResearch } from "@/pages/BrokerResearch";
 import { SectorIntelligence } from "@/pages/SectorIntelligence";
 import { Recommendations } from "@/pages/Recommendations";
@@ -57,7 +57,7 @@ export default function App() {
             <Route path="/family" element={<Gate><FamilyEntities /></Gate>} />
             <Route path="/core-satellite" element={<Gate><CoreSatellite /></Gate>} />
             <Route path="/sectors" element={<Gate><SectorComposition /></Gate>} />
-            <Route path="/risk" element={<Gate><RiskPerformance /></Gate>} />
+            <Route path="/risk" element={<Gate><RiskLeverage /></Gate>} />
             <Route path="/funds" element={<Gate><FundAnalytics /></Gate>} />
             <Route path="/capital-gains" element={<Gate><CapitalGains /></Gate>} />
             <Route path="/liquidity" element={<Gate><Liquidity /></Gate>} />

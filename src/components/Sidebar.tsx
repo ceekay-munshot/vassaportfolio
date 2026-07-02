@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Upload, LineChart, Lock } from "lucide-react";
+import { Upload, LineChart, ShieldAlert, Lock } from "lucide-react";
 import { usePortfolio } from "@/context/PortfolioContext";
 
 // Tabs reachable even without a portfolio loaded.
@@ -10,6 +10,7 @@ const ALWAYS_ACCESSIBLE = new Set(["/upload"]);
 const NAV = [
   { to: "/upload", label: "Upload Portfolio", icon: Upload, group: "Setup" },
   { to: "/monitor", label: "Portfolio Monitor", icon: LineChart, group: "Daily" },
+  { to: "/risk", label: "Risk & Leverage", icon: ShieldAlert, group: "Analytics" },
 ] as const;
 
 export function Sidebar() {

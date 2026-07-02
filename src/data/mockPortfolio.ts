@@ -20,6 +20,7 @@
 
 import type { Holding, Portfolio, UploadEvent } from "@/lib/portfolioTypes";
 import { MANAGER_VEHICLES } from "@/lib/portfolioTypes";
+import type { Quote } from "@/lib/priceService";
 
 const BASE_CURRENCY = "INR" as const;
 const OWNER = "Nirbhay Vassa";
@@ -112,7 +113,8 @@ export function toHolding(seed: Seed): Omit<Holding, "portfolioWeight"> {
 
 // Recompute the derived fields of a holding for a new current price. Used by the
 // live-price layer (see applyLivePrices in PortfolioContext).
-export function repriceHolding(h: Holding, price: number, prevClose?: number): Holding {
+export function repriceHolding(h: Holding, q: Quote): Holding {
+  const price = q.currentPrice;
   const marketValue = h.quantity * price;
   const costBasis = h.costUnknown ? 0 : h.quantity * h.averageCost;
   const unrealizedPnL = h.costUnknown ? 0 : marketValue - costBasis;
@@ -120,8 +122,13 @@ export function repriceHolding(h: Holding, price: number, prevClose?: number): H
   return {
     ...h,
     currentPrice: price,
-    prevClose,
+    prevClose: q.previousClose,
     priceStatus: "live",
+    week52Low: q.week52Low,
+    week52High: q.week52High,
+    ma50: q.ma50,
+    ma200: q.ma200,
+    yearlyChangePct: q.yearlyChangePct,
     marketValue,
     unrealizedPnL,
     returnPct,

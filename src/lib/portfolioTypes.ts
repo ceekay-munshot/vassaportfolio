@@ -88,6 +88,14 @@ export type Holding = {
   prevClose?: number;         // previous close, for the day-change figure
   priceStatus?: "live" | "unresolved"; // did the live feed price this holding?
 
+  // Live market stats (from the quote API) — power the Risk screen's momentum
+  // and volatility signals.
+  week52Low?: number;
+  week52High?: number;
+  ma50?: number;
+  ma200?: number;
+  yearlyChangePct?: number;
+
   // Derived for the dashboard (computed in the parser, not user-supplied).
   unrealizedPnL: number;      // qty * (currentPrice - averageCost) — native currency
   returnPct: number;          // (currentPrice - averageCost) / averageCost * 100
