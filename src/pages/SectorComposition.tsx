@@ -1,215 +1,192 @@
-import { chart } from "@/theme/tokens";
-import { useMemo, useState } from "react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { useState } from "react";
+import { PieChart, Boxes } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Card } from "@/components/Card";
-import { Pill } from "@/components/Pill";
 import { usePortfolio } from "@/context/PortfolioContext";
-import { activeOf, mvBase, vehicleOf, isManagerVehicle } from "@/lib/portfolioAnalytics";
-import { ALL_VEHICLES } from "@/lib/portfolioTypes";
-import { chartTooltipStyle, chartTooltipItemStyle, chartTooltipLabelStyle } from "@/lib/chartTheme";
+import { fmtPct, changeColor } from "@/lib/format";
+import type { Holding } from "@/lib/portfolioTypes";
 
-const PALETTE = chart.categorical;
+const mv = (h: Holding) => h.marketValueBase ?? h.marketValue;
+const cost = (h: Holding) => (h.costUnknown ? 0 : h.costBasisBase ?? h.costBasis);
+const gain = (h: Holding) => (h.costUnknown ? 0 : h.unrealizedPnLBase ?? h.unrealizedPnL);
 
-// Illustrative NIFTY 500 sector weights (%), used for the variation-vs-benchmark
-// read the family asked for ("my benchmark says Nifty 500 — what's my variation").
-const NIFTY500_WEIGHTS: Record<string, number> = {
-  Financials: 31.5,
-  Technology: 12.8,
-  Energy: 9.4,
-  "Consumer Discretionary": 8.6,
-  Industrials: 8.1,
-  Healthcare: 7.2,
-  "Consumer Staples": 6.9,
-  Materials: 6.8,
-  "Communication Services": 3.1,
-  Utilities: 2.9,
-  "Real Estate": 1.2,
-};
-
-type Scope = "Consolidated" | "Direct (no managers)" | "Via managers";
+type Agg = { sector: string; cost: number; value: number; gain: number; count: number; hasUnknownCost: boolean };
 
 export function SectorComposition() {
   const { portfolio, fmtFromBase } = usePortfolio();
-  const [scope, setScope] = useState<Scope>("Consolidated");
-  const [vehicle, setVehicle] = useState<string>("All");
+  const [basis, setBasis] = useState<"value" | "cost">("value");
+
+  const holdings = portfolio?.holdings ?? [];
+  const inr = (n: number) => fmtFromBase(n, { compact: true });
+
   if (!portfolio) return null;
 
-  const holdings = useMemo(() => {
-    return activeOf(portfolio).filter((h) => {
-      if (scope === "Direct (no managers)" && isManagerVehicle(h)) return false;
-      if (scope === "Via managers" && !isManagerVehicle(h)) return false;
-      if (vehicle !== "All" && vehicleOf(h) !== vehicle) return false;
-      return true;
-    });
-  }, [portfolio, scope, vehicle]);
+  const totalValue = holdings.reduce((s, h) => s + mv(h), 0);
+  const totalCost = holdings.reduce((s, h) => s + cost(h), 0);
+  // Gain sums only holdings with a cost record — so it matches the header P&L
+  // and never counts a cost-unknown holding's value as "gain".
+  const totalGain = holdings.reduce((s, h) => s + gain(h), 0);
 
-  const totalMV = holdings.reduce((s, h) => s + mvBase(h), 0);
+  const m = new Map<string, Agg>();
+  for (const h of holdings) {
+    const a = m.get(h.sector) ?? { sector: h.sector, cost: 0, value: 0, gain: 0, count: 0, hasUnknownCost: false };
+    a.cost += cost(h);
+    a.value += mv(h);
+    a.gain += gain(h);
+    a.count += 1;
+    if (h.costUnknown) a.hasUnknownCost = true;
+    m.set(h.sector, a);
+  }
+  const sectors = Array.from(m.values()).sort((x, y) => (basis === "value" ? y.value - x.value : y.cost - x.cost));
+  const maxBar = Math.max(1, ...sectors.map((s) => (basis === "value" ? s.value : s.cost)));
 
-  const rows = useMemo(() => {
-    const map: Record<string, { mv: number; positions: number }> = {};
-    for (const h of holdings) {
-      map[h.sector] = map[h.sector] || { mv: 0, positions: 0 };
-      map[h.sector].mv += mvBase(h);
-      map[h.sector].positions += 1;
-    }
-    return Object.entries(map)
-      .map(([sector, v]) => {
-        const actual = totalMV > 0 ? v.mv / totalMV : 0;
-        const bench = NIFTY500_WEIGHTS[sector];
-        return {
-          sector,
-          mv: v.mv,
-          positions: v.positions,
-          actual,
-          bench: bench != null ? bench / 100 : null,
-          variation: bench != null ? actual * 100 - bench : null,
-        };
-      })
-      .sort((a, b) => b.mv - a.mv);
-  }, [holdings, totalMV]);
+  const mfValue = holdings.filter((h) => h.vehicle === "Mutual Fund").reduce((s, h) => s + mv(h), 0);
+  const directValue = totalValue - mfValue;
+  const directPct = totalValue > 0 ? (directValue / totalValue) * 100 : 0;
 
-  const sectorColor = (idx: number) => PALETTE[idx % PALETTE.length];
-  const donutData = rows.map((r, i) => ({ name: r.sector, value: r.mv, color: sectorColor(i) }));
-  const compareBars = rows.map((r) => ({
-    name: r.sector.length > 12 ? r.sector.slice(0, 11) + "…" : r.sector,
-    fullName: r.sector,
-    Portfolio: Number((r.actual * 100).toFixed(1)),
-    "NIFTY 500": r.bench != null ? Number((r.bench * 100).toFixed(1)) : 0,
-  }));
-
-  const SCOPES: Scope[] = ["Consolidated", "Direct (no managers)", "Via managers"];
+  const ranked = sectors.filter((s) => s.cost > 0).map((s) => ({ ...s, ret: (s.gain / s.cost) * 100 }));
+  const best = ranked.length ? ranked.reduce((a, b) => (b.ret > a.ret ? b : a)) : undefined;
+  const worst = ranked.length ? ranked.reduce((a, b) => (b.ret < a.ret ? b : a)) : undefined;
 
   return (
-    <div>
+    <div className="pb-8">
       <PageHeader
         eyebrow="Allocation"
         title="Sector Composition"
-        subtitle="Sector tilts across your book, with the variation against your NIFTY 500 benchmark. Slice by vehicle to see direct-only or manager-routed exposure."
-        right={<Pill tone="info">vs NIFTY 500</Pill>}
-      />
-
-      <Card className="mb-4" pad>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="inline-flex items-center gap-0.5 rounded-md border border-slate-700 bg-ink-800/60 p-0.5">
-            {SCOPES.map((s) => (
+        subtitle="Live GICS-sector exposure — switch between money put (cost) and money made (market value), and see which sectors are working."
+        right={
+          <div className="inline-flex items-center rounded-md border border-slate-700 bg-ink-800/60 p-0.5 text-xs">
+            {(["value", "cost"] as const).map((b) => (
               <button
-                key={s}
-                onClick={() => setScope(s)}
-                className={[
-                  "rounded px-2.5 py-1 text-xs font-medium transition-colors active:scale-[0.97]",
-                  scope === s ? "bg-gold-500 text-ink-950" : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200",
-                ].join(" ")}
+                key={b}
+                onClick={() => setBasis(b)}
+                className={`rounded px-2.5 py-1 font-medium transition-colors ${
+                  basis === b ? "bg-gold-500 text-white" : "text-slate-400 hover:text-slate-200"
+                }`}
               >
-                {s}
+                {b === "value" ? "Money made (value)" : "Money put (cost)"}
               </button>
             ))}
           </div>
-          <label className="flex items-center gap-2 text-xs text-slate-400">
-            <span className="label-xs">Vehicle</span>
-            <select value={vehicle} onChange={(e) => setVehicle(e.target.value)} className="rounded-md border border-slate-700 bg-ink-700 px-2 py-1.5 text-xs text-slate-200 ring-focus">
-              {["All", ...ALL_VEHICLES].map((o) => <option key={o}>{o}</option>)}
-            </select>
-          </label>
-          <span className="ml-auto text-[11px] text-slate-500">Fund/AIF/PMS holdings are tagged “Diversified”; benchmark variation applies to single-stock sectors.</span>
-        </div>
-      </Card>
+        }
+      />
 
-      <div className="grid gap-5 lg:grid-cols-3">
-        <Card title="Sector mix" subtitle="Share of selected NAV">
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={donutData} dataKey="value" innerRadius={56} outerRadius={92} paddingAngle={1.5} stroke="none">
-                  {donutData.map((d) => <Cell key={d.name} fill={d.color} />)}
-                </Pie>
-                <Tooltip formatter={(v: number) => fmtFromBase(v, { compact: true })} contentStyle={chartTooltipStyle} labelStyle={chartTooltipLabelStyle} itemStyle={chartTooltipItemStyle} />
-              </PieChart>
-            </ResponsiveContainer>
+      <div className="mb-4 grid gap-3 sm:grid-cols-3">
+        <Tile label="Sectors" value={String(sectors.length)} sub={`${holdings.length} holdings`} icon={<Boxes className="h-4 w-4" />} />
+        <Tile label="Best sector (return)" value={best ? best.sector : "—"} sub={best ? fmtPct(best.ret, { sign: true }) : undefined} tone="gain" />
+        <Tile label="Weakest sector (return)" value={worst ? worst.sector : "—"} sub={worst ? fmtPct(worst.ret, { sign: true }) : undefined} tone="loss" />
+      </div>
+
+      <div className="mb-4 grid gap-4 lg:grid-cols-3">
+        <Card pad className="lg:col-span-2">
+          <div className="flex items-center gap-2">
+            <PieChart className="h-4 w-4 text-gold-500" />
+            <span className="text-sm font-semibold text-slate-100">Allocation by {basis === "value" ? "market value" : "cost"}</span>
           </div>
-          <ul className="mt-3 space-y-1.5 text-xs">
-            {rows.slice(0, 10).map((r, i) => (
-              <li key={r.sector} className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-sm" style={{ background: sectorColor(i) }} />
-                <span className="flex-1 truncate text-slate-300">{r.sector}</span>
-                <span className="mono text-slate-200">{(r.actual * 100).toFixed(1)}%</span>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-4 space-y-2.5">
+            {sectors.map((s) => {
+              const amt = basis === "value" ? s.value : s.cost;
+              const denom = basis === "value" ? totalValue : totalCost;
+              const pct = denom > 0 ? (amt / denom) * 100 : 0;
+              return (
+                <div key={s.sector} className="flex items-center gap-3 text-sm">
+                  <span className="w-44 shrink-0 truncate text-slate-300">{s.sector}</span>
+                  <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-slate-800">
+                    <div className="h-full rounded-full bg-gold-500/80" style={{ width: `${(amt / maxBar) * 100}%` }} />
+                  </div>
+                  <span className="w-20 shrink-0 text-right mono text-slate-200">{inr(amt)}</span>
+                  <span className="w-12 shrink-0 text-right mono text-slate-500">{fmtPct(pct, { decimals: 0 })}</span>
+                </div>
+              );
+            })}
+          </div>
         </Card>
 
-        <Card className="lg:col-span-2" title="Portfolio vs benchmark" subtitle="Your sector weight against NIFTY 500">
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={compareBars} margin={{ top: 8, right: 8, left: -8, bottom: 32 }}>
-                <CartesianGrid stroke={chart.grid} strokeDasharray="2 4" vertical={false} />
-                <XAxis dataKey="name" stroke={chart.axis} fontSize={10} interval={0} angle={-25} textAnchor="end" />
-                <YAxis stroke={chart.axis} fontSize={11} tickFormatter={(v) => `${v}%`} />
-                <Tooltip
-                  contentStyle={chartTooltipStyle}
-                  labelStyle={chartTooltipLabelStyle}
-                  itemStyle={chartTooltipItemStyle}
-                  formatter={(v: number) => `${v.toFixed(1)}%`}
-                  labelFormatter={(_, payload) => (payload?.[0]?.payload?.fullName as string) ?? ""}
-                />
-                <Bar dataKey="NIFTY 500" fill={chart.benchmarkBar} radius={[3, 3, 0, 0]} />
-                <Bar dataKey="Portfolio" fill={chart.primary} radius={[3, 3, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+        <Card pad>
+          <div className="text-sm font-semibold text-slate-100">Direct vs Managed</div>
+          <div className="mt-1 text-[11px] text-slate-500">How much you run yourself vs via a fund / manager.</div>
+          <div className="mt-4 flex h-3 overflow-hidden rounded-full bg-slate-800">
+            <div className="h-full bg-gold-500/80" style={{ width: `${directPct}%` }} />
+            <div className="h-full bg-slate-500/50" style={{ width: `${100 - directPct}%` }} />
+          </div>
+          <div className="mt-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-2 text-sm text-slate-300"><span className="h-2 w-2 rounded-full bg-gold-500" /> Direct equity</span>
+              <span className="mono text-slate-100">{inr(directValue)} · {fmtPct(directPct, { decimals: 0 })}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-2 text-sm text-slate-300"><span className="h-2 w-2 rounded-full bg-slate-500" /> Via managers (MF)</span>
+              <span className="mono text-slate-100">{inr(mfValue)} · {fmtPct(100 - directPct, { decimals: 0 })}</span>
+            </div>
           </div>
         </Card>
       </div>
 
-      <Card className="mt-5" title="Sector breakdown" subtitle="Weight, market value and variation vs NIFTY 500" pad={false}>
-        <table className="min-w-full">
-          <thead className="border-b border-slate-800">
-            <tr>
-              <th className="label-xs px-4 py-2 text-left font-medium">Sector</th>
-              <th className="label-xs px-4 py-2 text-right font-medium">Positions</th>
-              <th className="label-xs px-4 py-2 text-right font-medium">Mkt Value</th>
-              <th className="label-xs px-4 py-2 text-right font-medium">Weight</th>
-              <th className="label-xs px-4 py-2 text-right font-medium">NIFTY 500</th>
-              <th className="label-xs px-4 py-2 text-right font-medium">Variation</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-800/70 text-sm">
-            {rows.map((r, i) => (
-              <tr key={r.sector} className="hover:bg-slate-800/30">
-                <td className="px-4 py-2.5">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-sm" style={{ background: sectorColor(i) }} />
-                    <span className="text-slate-200">{r.sector}</span>
-                  </div>
-                </td>
-                <td className="px-4 py-2.5 text-right mono text-slate-300">{r.positions}</td>
-                <td className="px-4 py-2.5 text-right mono text-slate-200">{fmtFromBase(r.mv, { compact: true })}</td>
-                <td className="px-4 py-2.5 text-right mono text-slate-100">{(r.actual * 100).toFixed(2)}%</td>
-                <td className="px-4 py-2.5 text-right mono text-slate-400">{r.bench != null ? `${(r.bench * 100).toFixed(1)}%` : "—"}</td>
-                <td className="px-4 py-2.5 text-right">
-                  {r.variation != null ? (
-                    <Pill tone={Math.abs(r.variation) < 1 ? "default" : r.variation > 0 ? "gain" : "loss"}>
-                      {r.variation > 0 ? "OW " : "UW "}{r.variation > 0 ? "+" : ""}{r.variation.toFixed(1)} pts
-                    </Pill>
-                  ) : (
-                    <span className="text-xs text-slate-500">—</span>
-                  )}
-                </td>
+      <Card pad={false}>
+        <div className="overflow-auto">
+          <table className="min-w-full text-sm">
+            <thead>
+              <tr className="border-b border-slate-800">
+                <th className="label-xs px-4 py-2.5 text-left font-medium">Sector</th>
+                <th className="label-xs px-3 py-2.5 text-right font-medium"># Holdings</th>
+                <th className="label-xs px-3 py-2.5 text-right font-medium">Cost (money put)</th>
+                <th className="label-xs px-3 py-2.5 text-right font-medium">Value (money made)</th>
+                <th className="label-xs px-3 py-2.5 text-right font-medium">Gain</th>
+                <th className="label-xs px-3 py-2.5 text-right font-medium">Return %</th>
+                <th className="label-xs px-3 py-2.5 text-right font-medium">Weight</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-800/70">
+              {sectors.map((s) => {
+                const ret = s.cost > 0 ? (s.gain / s.cost) * 100 : undefined;
+                const wt = totalValue > 0 ? (s.value / totalValue) * 100 : 0;
+                return (
+                  <tr key={s.sector} className="hover:bg-slate-800/30">
+                    <td className="px-4 py-3 text-slate-200">{s.sector}</td>
+                    <td className="px-3 py-3 text-right mono text-slate-400">{s.count}</td>
+                    <td className="px-3 py-3 text-right mono text-slate-300">{s.hasUnknownCost && s.cost === 0 ? "—" : inr(s.cost)}</td>
+                    <td className="px-3 py-3 text-right mono text-slate-100">{inr(s.value)}</td>
+                    <td className={`px-3 py-3 text-right mono ${ret == null ? "text-slate-500" : changeColor(s.gain)}`}>
+                      {ret == null ? "—" : fmtFromBase(s.gain, { compact: true, sign: true })}
+                    </td>
+                    <td className={`px-3 py-3 text-right mono ${ret == null ? "text-slate-500" : changeColor(ret)}`}>
+                      {ret == null ? "—" : fmtPct(ret, { sign: true })}
+                    </td>
+                    <td className="px-3 py-3 text-right mono text-slate-200">{fmtPct(wt, { decimals: 1 })}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot>
+              <tr className="border-t border-slate-700">
+                <td className="px-4 py-3 text-xs uppercase tracking-wider text-slate-500">Total</td>
+                <td className="px-3 py-3 text-right mono text-slate-400">{holdings.length}</td>
+                <td className="px-3 py-3 text-right mono text-slate-300">{inr(totalCost)}</td>
+                <td className="px-3 py-3 text-right mono font-semibold text-slate-100">{inr(totalValue)}</td>
+                <td className={`px-3 py-3 text-right mono ${changeColor(totalGain)}`}>{fmtFromBase(totalGain, { compact: true, sign: true })}</td>
+                <td className="px-3 py-3 text-right mono text-slate-400">{totalCost > 0 ? fmtPct((totalGain / totalCost) * 100, { sign: true }) : "—"}</td>
+                <td className="px-3 py-3 text-right mono text-slate-200">100%</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div className="border-t border-slate-800 px-4 py-2 text-[11px] text-slate-500">
+          Cost excludes holdings with no cost record (e.g. DCB Bank), so a sector may show value without a return.
+        </div>
       </Card>
     </div>
+  );
+}
+
+function Tile({ label, value, sub, tone, icon }: { label: string; value: string; sub?: string; tone?: "gain" | "loss"; icon?: React.ReactNode }) {
+  return (
+    <Card pad>
+      <div className="flex items-center gap-1.5 label-xs">
+        {icon && <span className="text-gold-500">{icon}</span>}
+        {label}
+      </div>
+      <div className="mt-1 font-display text-xl text-slate-100">{value}</div>
+      {sub && <div className={`mt-0.5 text-[11px] ${tone === "loss" ? "text-loss" : tone === "gain" ? "text-gain" : "text-slate-500"}`}>{sub}</div>}
+    </Card>
   );
 }

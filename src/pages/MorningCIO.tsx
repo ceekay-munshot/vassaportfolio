@@ -1,380 +1,286 @@
-import { chart } from "@/theme/tokens";
-import { Link } from "react-router-dom";
-import {
-  ArrowUpRight,
-  AlertTriangle,
-  Newspaper,
-  Sparkles,
-  Activity,
-  Briefcase,
-} from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { useEffect, useState, type ReactNode } from "react";
+import { Sunrise, TrendingUp, TrendingDown, Wallet, Plus, X, Eye } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Card } from "@/components/Card";
-import { StatTile } from "@/components/StatTile";
-import { Pill } from "@/components/Pill";
-import { activeHoldings, usePortfolio } from "@/context/PortfolioContext";
-import { fmtPct, changeColor, relativeTime } from "@/lib/format";
-import { bucketBy, vehicleOf } from "@/lib/portfolioAnalytics";
-import { buildBenchmarkSeries } from "@/data/mockBenchmark";
-import { MOCK_NEWS } from "@/data/mockNews";
-import { chartTooltipStyle, chartTooltipLabelStyle, chartTooltipItemStyle } from "@/lib/chartTheme";
-import { MOCK_RECOMMENDATIONS } from "@/data/mockRecommendations";
+import { usePortfolio } from "@/context/PortfolioContext";
+import { fmtCurrency, fmtPct, changeColor } from "@/lib/format";
+import { fetchQuotes, type Quote } from "@/lib/priceService";
+import type { Holding } from "@/lib/portfolioTypes";
+
+const mv = (h: Holding) => h.marketValueBase ?? h.marketValue;
+const prevVal = (h: Holding) => h.quantity * (h.prevClose ?? h.currentPrice);
+const dayChangePct = (h: Holding) =>
+  h.prevClose && h.prevClose > 0 ? ((h.currentPrice - h.prevClose) / h.prevClose) * 100 : 0;
+
+const WKEY = "nv:watchlist";
+const DEFAULT_WATCH = ["RELIANCE", "INFY", "SUNPHARMA"];
+
+function useWatchlist(): [string[], (t: string) => void, (t: string) => void] {
+  const [list, setList] = useState<string[]>(() => {
+    try {
+      const s = localStorage.getItem(WKEY);
+      if (s) return JSON.parse(s);
+    } catch {
+      /* ignore */
+    }
+    return DEFAULT_WATCH;
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem(WKEY, JSON.stringify(list));
+    } catch {
+      /* ignore */
+    }
+  }, [list]);
+  const add = (t: string) => setList((p) => (t && !p.includes(t) ? [...p, t] : p));
+  const remove = (t: string) => setList((p) => p.filter((x) => x !== t));
+  return [list, add, remove];
+}
 
 export function MorningCIO() {
-  const { portfolio, fmtFromBase } = usePortfolio();
+  const { portfolio, fmtFromBase, pricesAsOf } = usePortfolio();
+  const holdings = portfolio?.holdings ?? [];
+  const inr = (n: number) => fmtFromBase(n, { compact: true });
+
+  const nav = holdings.reduce((s, h) => s + mv(h), 0);
+  const prevNav = holdings.reduce((s, h) => s + prevVal(h), 0);
+  const dayChange = nav - prevNav;
+  const dayPct = prevNav > 0 ? (dayChange / prevNav) * 100 : 0;
+
+  const costHoldings = holdings.filter((h) => !h.costUnknown);
+  const invested = costHoldings.reduce((s, h) => s + (h.costBasisBase ?? h.costBasis), 0);
+  const pnl = costHoldings.reduce((s, h) => s + (h.unrealizedPnLBase ?? h.unrealizedPnL), 0);
+  const pnlPct = invested > 0 ? (pnl / invested) * 100 : 0;
+
+  // Blended 1-year change: market-value-weighted average of holdings' own yearly change.
+  let ycNum = 0;
+  let ycDen = 0;
+  for (const h of holdings) {
+    if (h.yearlyChangePct != null) {
+      ycNum += mv(h) * h.yearlyChangePct;
+      ycDen += mv(h);
+    }
+  }
+  const blended1y = ycDen > 0 ? ycNum / ycDen : undefined;
+
+  const live = holdings.filter((h) => h.priceStatus === "live" && h.prevClose);
+  const dayMovers = [...live].sort((a, b) => dayChangePct(b) - dayChangePct(a));
+  const topUp = dayMovers.slice(0, 3);
+  const topDown = [...dayMovers].reverse().slice(0, 3);
+  const sinceCost = costHoldings.filter((h) => h.priceStatus === "live").sort((a, b) => b.returnPct - a.returnPct);
+
   if (!portfolio) return null;
 
-  const holdings = activeHoldings(portfolio);
-  const byVehicle = bucketBy(holdings, vehicleOf);
-  const totalValue = portfolio.totalValue;
-  // Sum in base currency so mixed-currency portfolios produce a coherent
-  // P&L and cost basis. Fall back to native fields if older holdings
-  // (persisted before the FX layer) lack the Base field.
-  const totalCost = holdings.reduce((s, h) => s + (h.costBasisBase ?? h.costBasis), 0);
-  const totalPnL = holdings.reduce((s, h) => s + (h.unrealizedPnLBase ?? h.unrealizedPnL), 0);
-  const totalReturnPct = totalCost > 0 ? (totalPnL / totalCost) * 100 : 0;
-
-  // Illustrative benchmark series — labeled clearly as demo data
-  // until a real performance feed is wired up.
-  const series = buildBenchmarkSeries();
-  const portRet = series[series.length - 1].portfolio - 100;
-  const benchRet = series[series.length - 1].benchmark - 100;
-  const alphaBps = (portRet - benchRet) * 100;
-
-  const tickerSet = new Set(holdings.map((h) => h.ticker));
-  const relevantNews = MOCK_NEWS.filter((n) => n.tickers.some((t) => tickerSet.has(t)));
-
-  // Top movers: by % return since purchase (we don't have day-change data
-  // from the upload — return-since-purchase is the most useful proxy).
-  const movers = [...holdings]
-    .sort((a, b) => Math.abs(b.returnPct) - Math.abs(a.returnPct))
-    .slice(0, 5);
-
-  const exited = portfolio.holdings.filter((h) => h.status === "Exited").length;
-  const watchlist = portfolio.holdings.filter((h) => h.status === "Watchlist").length;
-
   return (
-    <div>
+    <div className="pb-8">
       <PageHeader
-        eyebrow="Daily Briefing"
-        title="Good morning — here's where things stand"
-        subtitle={`Snapshot generated ${new Date().toLocaleString("en-US", {
-          weekday: "long",
-          month: "short",
-          day: "numeric",
-          hour: "numeric",
-          minute: "2-digit",
-        })}`}
-        right={<Pill tone="info">Source: {portfolio.fileName}</Pill>}
+        eyebrow="Daily"
+        title="Morning CIO"
+        subtitle={`Your desk view — live NAV, today's movers and a tracker. Prices ${pricesAsOf ? "live" : "loading"}.`}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatTile
-          label="Portfolio NAV"
-          value={fmtFromBase(totalValue, { compact: true })}
-          sub={`${holdings.length} active holdings`}
-          icon={<Briefcase className="h-4 w-4" />}
+      <div className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <Tile icon={<Wallet className="h-4 w-4" />} label="Portfolio Value" value={inr(nav)} sub="Live NAV" />
+        <Tile
+          label="Today"
+          value={fmtFromBase(dayChange, { compact: true, sign: true })}
+          sub={fmtPct(dayPct, { sign: true })}
+          tone={dayChange >= 0 ? "gain" : "loss"}
         />
-        <StatTile
+        <Tile
           label="Unrealized P&L"
-          value={fmtFromBase(totalPnL, { compact: true, sign: true })}
-          delta={totalReturnPct}
-          sub={`Cost basis ${fmtFromBase(totalCost, { compact: true })}`}
-          icon={<Activity className="h-4 w-4" />}
+          value={fmtFromBase(pnl, { compact: true, sign: true })}
+          sub={`${fmtPct(pnlPct, { sign: true })} on cost`}
+          tone={pnl >= 0 ? "gain" : "loss"}
         />
-        <StatTile
-          label="Watchlist / Exited"
-          value={`${watchlist} / ${exited}`}
-          sub={`${portfolio.holdings.length} total rows`}
-        />
-        <StatTile
-          label="Alpha vs Benchmark (1Y)"
-          value={`${alphaBps >= 0 ? "+" : ""}${alphaBps.toFixed(0)} bps`}
-          sub="Illustrative — performance feed pending"
-          delta={portRet - benchRet}
+        <Tile
+          label="Blended 1-yr"
+          value={blended1y != null ? fmtPct(blended1y, { sign: true }) : "—"}
+          sub="Weighted, holdings' 1Y"
+          tone={blended1y != null && blended1y >= 0 ? "gain" : blended1y != null ? "loss" : undefined}
         />
       </div>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-3">
-        <Card
-          className="lg:col-span-2"
-          title="Portfolio vs Benchmark"
-          subtitle="Indexed to 100 · trailing 12 months · illustrative until live price feed"
-          right={<Pill tone="gain">+{(portRet - benchRet).toFixed(1)} pts excess</Pill>}
-        >
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={series} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="port" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={chart.primary} stopOpacity={0.4} />
-                    <stop offset="100%" stopColor={chart.primary} stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="bench" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={chart.benchmark} stopOpacity={0.25} />
-                    <stop offset="100%" stopColor={chart.benchmark} stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid stroke={chart.grid} strokeDasharray="2 4" vertical={false} />
-                <XAxis dataKey="date" stroke={chart.axis} fontSize={11} tickFormatter={(d) => d.slice(5)} />
-                <YAxis stroke={chart.axis} fontSize={11} domain={["dataMin - 2", "dataMax + 2"]} />
-                <Tooltip
-                  contentStyle={chartTooltipStyle}
-                  labelStyle={chartTooltipLabelStyle}
-                  itemStyle={chartTooltipItemStyle}
-                />
-                <Area type="monotone" dataKey="benchmark" stroke={chart.axis} strokeWidth={1.5} fill="url(#bench)" name="Benchmark" />
-                <Area type="monotone" dataKey="portfolio" stroke={chart.primary} strokeWidth={2} fill="url(#port)" name="Portfolio" />
-              </AreaChart>
-            </ResponsiveContainer>
+      {/* Benchmark placeholder — honest until an index feed is wired */}
+      <Card pad className="mb-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <div className="text-sm font-semibold text-slate-100">Portfolio vs NIFTY 500</div>
+            <div className="text-[11px] text-slate-500">Your blended 1-year move is real; the index line needs a benchmark feed (the quote API is single-stock only).</div>
+          </div>
+          <div className="flex items-center gap-4 text-sm">
+            <span className="text-slate-400">You (1Y): <span className={`mono ${blended1y != null ? changeColor(blended1y) : ""}`}>{blended1y != null ? fmtPct(blended1y, { sign: true }) : "—"}</span></span>
+            <span className="pill">NIFTY 500 · feed pending</span>
+          </div>
+        </div>
+      </Card>
+
+      <div className="mb-4 grid gap-4 lg:grid-cols-2">
+        <Card pad>
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 text-gain" />
+            <span className="text-sm font-semibold text-slate-100">Top movers today</span>
+          </div>
+          <div className="mt-3 space-y-1">
+            {topUp.map((h) => <MoverRow key={h.ticker} h={h} inr={inr} />)}
+            <div className="my-2 divider" />
+            {topDown.map((h) => <MoverRow key={h.ticker} h={h} inr={inr} />)}
           </div>
         </Card>
 
-        <Card title="Top movers (since cost)">
-          <ul className="divide-y divide-slate-800">
-            {movers.map((h) => (
-              <li key={h.ticker} className="flex items-center justify-between py-2.5">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="mono text-[13px] font-semibold text-slate-100">{h.ticker}</span>
-                    <Pill tone={h.coreSatellite === "Core" ? "core" : "satellite"}>{h.coreSatellite}</Pill>
-                  </div>
-                  <div className="truncate text-[11px] text-slate-500">{h.companyName}</div>
-                </div>
-                <div className="text-right">
-                  <div className={`mono text-[13px] ${changeColor(h.returnPct)}`}>
-                    {fmtPct(h.returnPct, { sign: true })}
-                  </div>
-                  <div className={`mono text-[11px] ${changeColor(h.unrealizedPnL)}`}>
-                    {fmtFromBase(h.unrealizedPnLBase ?? h.unrealizedPnL, { compact: true, sign: true })}
-                  </div>
-                </div>
-              </li>
-            ))}
-            {movers.length === 0 && (
-              <li className="py-8 text-center text-xs text-slate-500">No active holdings yet.</li>
-            )}
-          </ul>
+        <Card pad>
+          <div className="flex items-center gap-2">
+            <TrendingDown className="h-4 w-4 text-gold-500" />
+            <span className="text-sm font-semibold text-slate-100">Best & worst since cost</span>
+          </div>
+          <div className="mt-3 space-y-1">
+            {sinceCost.slice(0, 3).map((h) => <CostRow key={h.ticker} h={h} />)}
+            <div className="my-2 divider" />
+            {sinceCost.slice(-3).reverse().map((h) => <CostRow key={h.ticker} h={h} />)}
+          </div>
         </Card>
       </div>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-3">
-        <Card
-          className="lg:col-span-2"
-          title="What matters to your portfolio today"
-          subtitle="News filtered to your holdings only"
-          right={
-            <Link to="/intelligence" className="text-xs text-gold-400 hover:underline">
-              Open intelligence →
-            </Link>
-          }
-        >
-          <ul className="space-y-3">
-            {relevantNews.slice(0, 4).map((n) => {
-              const href =
-                n.sourceUrl ??
-                `https://news.google.com/search?q=${encodeURIComponent(`${n.source} ${n.title}`)}`;
-              return (
-                <li key={n.id}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex gap-3 rounded-lg border border-slate-800 bg-ink-700/40 p-3 transition-colors hover:border-gold-400/40 hover:bg-ink-700/60"
-                  >
-                    <div
-                      className={`mt-1 h-2 w-2 shrink-0 rounded-full ${
-                        n.impact === "positive"
-                          ? "bg-emerald-400"
-                          : n.impact === "negative"
-                            ? "bg-rose-400"
-                            : "bg-slate-500"
-                      }`}
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <Newspaper className="h-3.5 w-3.5 text-slate-500" />
-                        <span className="text-[11px] uppercase tracking-wider text-slate-500">
-                          {n.source} · {relativeTime(n.date)}
-                        </span>
-                        <Pill tone={n.importance === "high" ? "warn" : "default"} className="ml-auto">
-                          {n.importance}
-                        </Pill>
-                      </div>
-                      <div className="mt-1 text-sm font-medium text-slate-100">{n.title}</div>
-                      <p className="mt-1 text-xs text-slate-400">{n.summary}</p>
-                      <div className="mt-2 flex flex-wrap gap-1.5">
-                        {n.tickers.filter((t) => tickerSet.has(t)).map((t) => (
-                          <Pill key={t}>{t}</Pill>
-                        ))}
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              );
-            })}
-            {relevantNews.length === 0 && (
-              <li className="py-6 text-center text-xs text-slate-500">
-                No news items match your current holdings.
-              </li>
-            )}
-          </ul>
-        </Card>
+      <Watchlist />
+    </div>
+  );
+}
 
-        <Card
-          title="Suggested actions"
-          right={
-            <Link to="/recommendations" className="text-xs text-gold-400 hover:underline">
-              View all →
-            </Link>
-          }
-        >
-          <ul className="space-y-3">
-            {MOCK_RECOMMENDATIONS.filter((r) =>
-              r.affectedTickers.length === 0 || r.affectedTickers.some((t) => tickerSet.has(t)),
-            )
-              .slice(0, 3)
-              .map((r) => (
-                <li key={r.id} className="rounded-lg border border-slate-800 bg-ink-700/40 p-3">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-3.5 w-3.5 text-gold-400" />
-                    <Pill tone={r.priority === "high" ? "loss" : r.priority === "medium" ? "warn" : "info"}>
-                      {r.type}
-                    </Pill>
-                    <span className="ml-auto text-[11px] text-slate-500">conf {r.confidence}</span>
-                  </div>
-                  <div className="mt-1.5 text-sm font-medium text-slate-100">{r.title}</div>
-                  <div className="mt-1 flex flex-wrap gap-1.5">
-                    {r.affectedTickers.slice(0, 4).map((t) => (
-                      <Pill key={t}>{t}</Pill>
-                    ))}
-                  </div>
-                </li>
-              ))}
-          </ul>
-        </Card>
-      </div>
-
-      <div className="mt-5 grid gap-5 lg:grid-cols-3">
-        <Card
-          className="lg:col-span-2"
-          title="Consolidated by vehicle"
-          subtitle={`Direct equity, mutual funds, PMS, AIFs & private — ${byVehicle.filter((b) => ["Mutual Fund", "PMS", "AIF"].includes(b.key)).reduce((s, b) => s + b.count, 0)} positions via managers`}
-          right={<Link to="/look-through" className="text-xs text-gold-400 hover:underline">Look-through →</Link>}
-        >
-          <ul className="space-y-2">
-            {byVehicle.map((b) => (
-              <li key={b.key} className="flex items-center gap-3">
-                <span className="w-32 shrink-0 text-sm text-slate-300">{b.key}</span>
-                <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-800">
-                  <div className="h-full bg-gold-500/70" style={{ width: `${Math.max(2, b.weight * 100)}%` }} />
-                </div>
-                <span className="w-20 shrink-0 text-right mono text-sm text-slate-100">{fmtFromBase(b.mv, { compact: true })}</span>
-                <span className="w-12 shrink-0 text-right mono text-[11px] text-slate-500">{(b.weight * 100).toFixed(0)}%</span>
-                <span className={`w-14 shrink-0 text-right mono text-[11px] ${changeColor(b.returnPct)}`}>{fmtPct(b.returnPct, { sign: true })}</span>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        <Card title="Jump to">
-          <ul className="space-y-2 text-sm">
-            {[
-              { to: "/ask", label: "Ask Munshot — chat with your book" },
-              { to: "/look-through", label: "Look-Through & Overlap" },
-              { to: "/family", label: "Family & Entities" },
-              { to: "/funds", label: "Fund & Scheme Analytics" },
-              { to: "/liquidity", label: "Liquidity & Capital Calls" },
-              { to: "/corporate-actions", label: "Corporate Actions" },
-            ].map((l) => (
-              <li key={l.to}>
-                <Link to={l.to} className="flex items-center gap-2 rounded-md border border-slate-800 bg-ink-700/40 px-3 py-2 text-slate-300 transition-colors hover:border-gold-400/40 hover:text-slate-100 active:scale-[0.99]">
-                  <ArrowUpRight className="h-3.5 w-3.5 text-gold-400" />
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </div>
-
-      <div className="mt-5 grid gap-5 lg:grid-cols-3">
-        <Card title="At a glance">
-          <ul className="space-y-2 text-sm">
-            <li className="flex items-center justify-between">
-              <span className="text-slate-400">Active holdings</span>
-              <span className="mono text-slate-100">{holdings.length}</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-slate-400">Sectors covered</span>
-              <span className="mono text-slate-100">
-                {new Set(holdings.map((h) => h.sector)).size}
-              </span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-slate-400">Geographies</span>
-              <span className="mono text-slate-100">
-                {Array.from(new Set(holdings.map((h) => h.geography))).join(" · ") || "—"}
-              </span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-slate-400">Active recommendations</span>
-              <span className="mono text-slate-100">{MOCK_RECOMMENDATIONS.length}</span>
-            </li>
-          </ul>
-        </Card>
-
-        <Card title="Risk watch">
-          <ul className="space-y-2.5 text-xs">
-            {(() => {
-              const items: { text: string }[] = [];
-              const concentrated = holdings.filter((h) => h.portfolioWeight > 0.1);
-              concentrated.forEach((h) =>
-                items.push({ text: `${h.ticker} concentration is ${(h.portfolioWeight * 100).toFixed(1)}% of NAV.` }),
-              );
-              const unclassified = holdings.filter((h) => h.sector === "Unclassified");
-              if (unclassified.length > 0) {
-                items.push({ text: `${unclassified.length} holding(s) have no sector tag — analytics partial.` });
-              }
-              if (items.length === 0) {
-                items.push({ text: "No concentration alerts. Diversification looks healthy." });
-              }
-              return items.slice(0, 4).map((i, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-slate-300">
-                  <AlertTriangle className="mt-0.5 h-3.5 w-3.5 text-amber-400" />
-                  {i.text}
-                </li>
-              ));
-            })()}
-          </ul>
-        </Card>
-
-        <Card title="Open this week">
-          <ul className="space-y-2.5 text-xs text-slate-300">
-            <li className="flex items-center gap-2">
-              <ArrowUpRight className="h-3.5 w-3.5 text-gold-400" />
-              IC review meeting — Friday 10:30
-            </li>
-            <li className="flex items-center gap-2">
-              <ArrowUpRight className="h-3.5 w-3.5 text-gold-400" />
-              Review high-concentration positions
-            </li>
-            <li className="flex items-center gap-2">
-              <ArrowUpRight className="h-3.5 w-3.5 text-gold-400" />
-              Sector tagging for unclassified holdings
-            </li>
-          </ul>
-        </Card>
+function MoverRow({ h, inr }: { h: Holding; inr: (n: number) => string }) {
+  const pct = dayChangePct(h);
+  const val = h.quantity * (h.currentPrice - (h.prevClose ?? h.currentPrice));
+  return (
+    <div className="flex items-center justify-between py-1 text-sm">
+      <span className="mono font-semibold text-slate-100">{h.ticker}</span>
+      <div className="flex items-center gap-3">
+        <span className="mono text-slate-400">{fmtCurrency(h.currentPrice, "INR")}</span>
+        <span className={`mono w-16 text-right ${changeColor(pct)}`}>{fmtPct(pct, { sign: true })}</span>
+        <span className={`mono w-16 text-right ${changeColor(val)}`}>{inr(val)}</span>
       </div>
     </div>
+  );
+}
+
+function CostRow({ h }: { h: Holding }) {
+  return (
+    <div className="flex items-center justify-between py-1 text-sm">
+      <span className="mono font-semibold text-slate-100">{h.ticker}</span>
+      <div className="flex items-center gap-3">
+        <span className="mono text-slate-400">{fmtCurrency(h.averageCost, "INR")} → {fmtCurrency(h.currentPrice, "INR")}</span>
+        <span className={`mono w-16 text-right ${changeColor(h.returnPct)}`}>{fmtPct(h.returnPct, { sign: true })}</span>
+      </div>
+    </div>
+  );
+}
+
+function Watchlist() {
+  const [list, add, remove] = useWatchlist();
+  const [quotes, setQuotes] = useState<Record<string, Quote>>({});
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (list.length === 0) {
+      setQuotes({});
+      return;
+    }
+    setLoading(true);
+    fetchQuotes(list).then((q) => {
+      if (!cancelled) {
+        setQuotes(q);
+        setLoading(false);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [list]);
+
+  const submit = () => {
+    const t = input.trim().toUpperCase();
+    if (t) add(t);
+    setInput("");
+  };
+
+  return (
+    <Card pad>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Eye className="h-4 w-4 text-gold-500" />
+          <span className="text-sm font-semibold text-slate-100">Watchlist</span>
+          <span className="text-[11px] text-slate-500">— track names you don't own yet (live)</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && submit()}
+            placeholder="Add NSE symbol…"
+            className="w-40 rounded-md border border-slate-700 bg-ink-700 px-2.5 py-1.5 text-xs text-slate-100 ring-focus"
+          />
+          <button onClick={submit} className="btn-ghost h-8 px-2.5" title="Add">
+            <Plus className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-3 overflow-auto">
+        <table className="min-w-full text-sm">
+          <thead>
+            <tr className="border-b border-slate-800">
+              <th className="label-xs px-2 py-2 text-left font-medium">Symbol</th>
+              <th className="label-xs px-2 py-2 text-right font-medium">Price</th>
+              <th className="label-xs px-2 py-2 text-right font-medium">Today</th>
+              <th className="label-xs px-2 py-2 text-right font-medium">1Y</th>
+              <th className="label-xs px-2 py-2 text-right font-medium">52-wk range</th>
+              <th className="px-2 py-2" />
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800/70">
+            {list.map((t) => {
+              const q = quotes[t];
+              const dp = q && q.previousClose ? ((q.currentPrice - q.previousClose) / q.previousClose) * 100 : undefined;
+              return (
+                <tr key={t} className="hover:bg-slate-800/30">
+                  <td className="px-2 py-2.5 mono font-semibold text-slate-100">{t}</td>
+                  <td className="px-2 py-2.5 text-right mono text-slate-200">{q ? fmtCurrency(q.currentPrice, "INR") : loading ? "…" : <span className="text-amber-500">n/a</span>}</td>
+                  <td className={`px-2 py-2.5 text-right mono ${dp != null ? changeColor(dp) : "text-slate-500"}`}>{dp != null ? fmtPct(dp, { sign: true }) : "—"}</td>
+                  <td className={`px-2 py-2.5 text-right mono ${q?.yearlyChangePct != null ? changeColor(q.yearlyChangePct) : "text-slate-500"}`}>
+                    {q?.yearlyChangePct != null ? fmtPct(q.yearlyChangePct, { sign: true }) : "—"}
+                  </td>
+                  <td className="px-2 py-2.5 text-right mono text-[11px] text-slate-500">
+                    {q?.week52Low != null && q?.week52High != null ? `${Math.round(q.week52Low)}–${Math.round(q.week52High)}` : "—"}
+                  </td>
+                  <td className="px-2 py-2.5 text-right">
+                    <button onClick={() => remove(t)} className="text-slate-500 hover:text-rose-500" title="Remove">
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+            {list.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-2 py-6 text-center text-xs text-slate-500">Add an NSE symbol to start tracking.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </Card>
+  );
+}
+
+function Tile({ icon, label, value, sub, tone }: { icon?: ReactNode; label: string; value: string; sub?: string; tone?: "gain" | "loss" }) {
+  return (
+    <Card pad>
+      <div className="flex items-center gap-1.5 label-xs">
+        {icon && <span className="text-gold-500">{icon}</span>}
+        {label}
+      </div>
+      <div className={`mt-1 font-display text-2xl ${tone === "loss" ? "text-loss" : tone === "gain" ? "text-gain" : "text-slate-100"}`}>{value}</div>
+      {sub && <div className="mt-0.5 text-[11px] text-slate-500">{sub}</div>}
+    </Card>
   );
 }
