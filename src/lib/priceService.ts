@@ -37,12 +37,18 @@ function range(s?: string): [number | undefined, number | undefined] {
   return [num(parts[0]), num(parts[1])];
 }
 
-export function parseQuote(raw: string): Quote | null {
+// Parse the API's "key=value,key=value" string into a plain map.
+function kvMap(raw: string): Record<string, string> {
   const map: Record<string, string> = {};
   for (const part of raw.split(",")) {
     const i = part.indexOf("=");
     if (i > 0) map[part.slice(0, i).trim()] = part.slice(i + 1).trim();
   }
+  return map;
+}
+
+export function parseQuote(raw: string): Quote | null {
+  const map = kvMap(raw);
   const cp = num(map["Current Price"]);
   if (cp == null) return null;
   const [dayLow, dayHigh] = range(map["Day Range"]);
@@ -88,6 +94,70 @@ export async function fetchQuotes(
     tickers.map(async (t) => {
       const q = await fetchQuote(t, country);
       if (q) out[t] = q;
+    }),
+  );
+  return out;
+}
+
+// --- Detail quote (fundamentals + valuation) --------------------------------
+// type "detailquote" returns sector/industry + valuation multiples and growth.
+
+export type DetailQuote = {
+  sector?: string;
+  industry?: string;
+  currentPrice?: number;
+  marketCap?: number;
+  peTrailing?: number;
+  peForward?: number;
+  priceToBook?: number;
+  priceToSales?: number;
+  evRevenue?: number;
+  evEbitda?: number;
+  revenueGrowthPct?: number;
+  earningsGrowthPct?: number;
+};
+
+export function parseDetail(raw: string): DetailQuote | null {
+  const map = kvMap(raw);
+  if (Object.keys(map).length === 0) return null;
+  return {
+    sector: map["Sector"] || undefined,
+    industry: map["Industry"] || undefined,
+    currentPrice: num(map["Current Price"]),
+    marketCap: num(map["Market Cap"]),
+    peTrailing: num(map["P/E Ratio (Trailing)"]),
+    peForward: num(map["P/E Ratio (Forward)"]),
+    priceToBook: num(map["Price-to-Book"]),
+    priceToSales: num(map["Price-to-Sales"]),
+    evRevenue: num(map["EV/Revenue"]),
+    evEbitda: num(map["EV/EBITDA"]),
+    revenueGrowthPct: num(map["Revenue Growth (%)"]),
+    earningsGrowthPct: num(map["Earnings Growth (%)"]),
+  };
+}
+
+export async function fetchDetail(ticker: string, country = "india"): Promise<DetailQuote | null> {
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ticker_symbol: ticker, type: "detailquote", country }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (typeof data !== "string") return null;
+    return parseDetail(data);
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchDetails(tickers: string[], country = "india"): Promise<Record<string, DetailQuote>> {
+  const out: Record<string, DetailQuote> = {};
+  await Promise.all(
+    tickers.map(async (t) => {
+      const d = await fetchDetail(t, country);
+      if (d) out[t] = d;
     }),
   );
   return out;
