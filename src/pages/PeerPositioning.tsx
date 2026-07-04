@@ -1,11 +1,12 @@
-import { type ReactNode } from "react";
-import { Users, TrendingUp, TrendingDown, Landmark, Building2 } from "lucide-react";
+import { Fragment, type ReactNode, useState } from "react";
+import { Users, TrendingUp, TrendingDown, Landmark, Building2, ChevronDown } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Card } from "@/components/Card";
 import { usePortfolio } from "@/context/PortfolioContext";
 import { fmtPct } from "@/lib/format";
 import type { Holding } from "@/lib/portfolioTypes";
 import peers from "@/data/peers.json";
+import fundHolders from "@/data/fundHolders.json";
 
 // ---- peers.json shape (produced by ingest/build_peers.py) ------------------
 type Ownership = {
@@ -35,6 +36,19 @@ type PeersFile = {
   stocks: Record<string, PeerStock>;
 };
 const PEERS = peers as unknown as PeersFile;
+
+// ---- fundHolders.json (produced by ingest/build_fund_holdings.py) ----------
+// Per stock: how many funds among the major houses we track hold it, and the
+// top ones by weight in the fund — the concrete "which funds hold my stocks".
+type FundHolder = { amc: string; scheme: string; pct: number };
+type FundHoldersFile = {
+  asOf: string | null;
+  amcsCovered: string[];
+  schemesParsed: number;
+  notes: string[];
+  stocks: Record<string, { count: number; top: FundHolder[] }>;
+};
+const FUNDS = fundHolders as unknown as FundHoldersFile;
 
 const mv = (h: Holding) => h.marketValueBase ?? h.marketValue;
 const n0 = (x: number | null | undefined) => (x == null ? 0 : x);
@@ -78,6 +92,7 @@ function mfTrend(s: PeerStock): number | null {
 
 export function PeerPositioning() {
   const { portfolio } = usePortfolio();
+  const [expanded, setExpanded] = useState<string | null>(null); // ticker whose fund list is open
   if (!portfolio) return null;
 
   const equities = portfolio.holdings.filter((h) => h.vehicle !== "Mutual Fund");
@@ -121,7 +136,7 @@ export function PeerPositioning() {
       <PageHeader
         eyebrow="Peer Comparison"
         title="Positioning"
-        subtitle="Who else owns your book — ownership structure and marquee-investor overlap, from public exchange filings. Are your names consensus institutional holdings or off-the-radar?"
+        subtitle="Who else owns your book — ownership structure, the mutual funds holding each name, and marquee-investor overlap, from public filings. Are your names consensus institutional holdings or off-the-radar?"
         right={
           <span className="text-xs text-slate-500">
             Ownership as of {PEERS.asOf.ownership} · {PEERS.coverage.withOwnership}/{PEERS.coverage.stocks} covered
@@ -188,47 +203,78 @@ export function PeerPositioning() {
                 const seg = segmentsFor(r.o);
                 const trend = mfTrend(r.peer!);
                 const pos = positioning(n0(r.o.institutional));
+                const funds = FUNDS.stocks[r.key];
+                const isOpen = expanded === r.key;
                 return (
-                  <tr key={r.key} className="hover:bg-slate-800/30">
-                    <td className="px-4 py-3">
-                      <div className="mono font-semibold text-slate-100">{r.key}</div>
-                      <div className="text-[11px] text-slate-500">{r.peer?.company}</div>
-                    </td>
-                    <td className="px-3 py-3 text-right mono text-slate-300">{fmtPct(r.weight, { decimals: 1 })}</td>
-                    <td className="px-4 py-3">
-                      <OwnershipBar seg={seg} />
-                      <div className="mt-1 text-[10px] text-slate-500">
-                        {n0(r.o.promoter) > 0 ? `${fmtPct(n0(r.o.promoter), { decimals: 0 })} promoter` : "no promoter"}
-                      </div>
-                    </td>
-                    <td className="px-3 py-3 text-right">
-                      <span className="mono text-slate-100">{fmtPct(n0(r.o.mf), { decimals: 1 })}</span>
-                      {trend != null && Math.abs(trend) >= 0.5 && (
-                        <div className={`text-[10px] ${trend > 0 ? "text-gain" : "text-loss"}`}>
-                          {trend > 0 ? "▲" : "▼"} {pp(trend)} 1y
+                  <Fragment key={r.key}>
+                    <tr className="hover:bg-slate-800/30">
+                      <td className="px-4 py-3">
+                        <div className="mono font-semibold text-slate-100">{r.key}</div>
+                        <div className="text-[11px] text-slate-500">{r.peer?.company}</div>
+                      </td>
+                      <td className="px-3 py-3 text-right mono text-slate-300">{fmtPct(r.weight, { decimals: 1 })}</td>
+                      <td className="px-4 py-3">
+                        <OwnershipBar seg={seg} />
+                        <div className="mt-1 text-[10px] text-slate-500">
+                          {n0(r.o.promoter) > 0 ? `${fmtPct(n0(r.o.promoter), { decimals: 0 })} promoter` : "no promoter"}
                         </div>
-                      )}
-                    </td>
-                    <td className="px-3 py-3 text-right mono text-slate-300">{fmtPct(n0(r.o.institutional), { decimals: 1 })}</td>
-                    <td className="px-3 py-3 text-center">
-                      <span className={`inline-block rounded-full border px-2 py-0.5 text-[11px] font-medium ${pos.cls}`}>
-                        {pos.label}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      {r.peer && r.peer.investors.length > 0 ? (
-                        <div className="flex flex-wrap gap-1">
-                          {r.peer.investors.map((inv) => (
-                            <span key={inv} className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-700 ring-1 ring-blue-500/20">
-                              <Users className="h-2.5 w-2.5" /> {inv}
-                            </span>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-[11px] text-slate-400">—</span>
-                      )}
-                    </td>
-                  </tr>
+                      </td>
+                      <td className="px-3 py-3 text-right">
+                        <span className="mono text-slate-100">{fmtPct(n0(r.o.mf), { decimals: 1 })}</span>
+                        {trend != null && Math.abs(trend) >= 0.5 && (
+                          <div className={`text-[10px] ${trend > 0 ? "text-gain" : "text-loss"}`}>
+                            {trend > 0 ? "▲" : "▼"} {pp(trend)} 1y
+                          </div>
+                        )}
+                        {funds && funds.count > 0 && (
+                          <button
+                            onClick={() => setExpanded(isOpen ? null : r.key)}
+                            className="ml-auto mt-0.5 flex items-center gap-0.5 text-[10px] font-medium text-blue-600 hover:underline"
+                          >
+                            {funds.count} fund{funds.count === 1 ? "" : "s"}
+                            <ChevronDown className={`h-2.5 w-2.5 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                          </button>
+                        )}
+                      </td>
+                      <td className="px-3 py-3 text-right mono text-slate-300">{fmtPct(n0(r.o.institutional), { decimals: 1 })}</td>
+                      <td className="px-3 py-3 text-center">
+                        <span className={`inline-block rounded-full border px-2 py-0.5 text-[11px] font-medium ${pos.cls}`}>
+                          {pos.label}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        {r.peer && r.peer.investors.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {r.peer.investors.map((inv) => (
+                              <span key={inv} className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-700 ring-1 ring-blue-500/20">
+                                <Users className="h-2.5 w-2.5" /> {inv}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-[11px] text-slate-400">—</span>
+                        )}
+                      </td>
+                    </tr>
+                    {isOpen && funds && (
+                      <tr className="bg-blue-50/40">
+                        <td colSpan={7} className="px-4 py-3">
+                          <div className="mb-2 text-[11px] font-medium text-slate-500">
+                            Funds holding <span className="mono text-slate-300">{r.key}</span> — top {funds.top.length} of {funds.count} by weight in the fund
+                            <span className="text-slate-400"> (among the major houses we track)</span>
+                          </div>
+                          <div className="grid gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
+                            {funds.top.map((f, i) => (
+                              <div key={i} className="flex items-center justify-between gap-3 border-b border-slate-200/50 py-1 text-[12px]">
+                                <span className="truncate text-slate-300" title={f.scheme}>{f.scheme}</span>
+                                <span className="shrink-0 mono text-slate-500">{f.pct.toFixed(1)}%</span>
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
                 );
               })}
 
@@ -287,8 +333,14 @@ export function PeerPositioning() {
       {/* Sources / honesty footnote */}
       <div className="mt-4 space-y-1 text-[11px] leading-relaxed text-slate-500">
         {PEERS.sources.map((s) => <div key={s}>· {s}</div>)}
+        {FUNDS.amcsCovered.length > 0 && (
+          <div>
+            · Fund holders — {FUNDS.schemesParsed} equity schemes across {FUNDS.amcsCovered.length} major houses
+            ({FUNDS.amcsCovered.join(", ")}), from official AMC monthly disclosures (as of {FUNDS.asOf}).
+          </div>
+        )}
         <div className="pt-1">
-          {PEERS.notes.join(" ")}
+          {PEERS.notes.join(" ")} {FUNDS.notes[0]}
         </div>
       </div>
     </div>

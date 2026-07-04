@@ -1,0 +1,828 @@
+{
+ "asOf": "31st-may-2026",
+ "amcsCovered": [
+  "SBI",
+  "ICICI Prudential",
+  "Nippon India",
+  "Kotak",
+  "Axis",
+  "Aditya Birla SL",
+  "Quant",
+  "Tata"
+ ],
+ "schemesParsed": 187,
+ "sources": [
+  "AMC monthly portfolio disclosures (SEBI-mandated), discovered via AdvisorKhoj's download centre."
+ ],
+ "notes": [
+  "Covers 8 major fund houses, not all ~44 AMCs \u2014 a transparent subset, not exhaustive.",
+  "Index funds, ETFs and pure debt/liquid schemes are excluded (they hold mechanically, not by conviction).",
+  "% is the stock's weight in that fund, from the fund's latest official monthly disclosure."
+ ],
+ "stocks": {
+  "ABB": {
+   "count": 38,
+   "top": [
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Energy Opportunities Fund",
+     "pct": 4.83
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI MNC Fund",
+     "pct": 2.99
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Retirement Fund - Pure Equity Plan",
+     "pct": 2.26
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Multicap Fund",
+     "pct": 2.19
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Innovation Fund",
+     "pct": 2.17
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Infrastructure Fund",
+     "pct": 2.13
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI ESG Exclusionary Strategy Fund",
+     "pct": 2.0
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life MNC Fund",
+     "pct": 1.93
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Infrastructure Fund",
+     "pct": 1.81
+    },
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak MNC Fund",
+     "pct": 1.76
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Retirement Benefit Fund - Aggressive Plan",
+     "pct": 1.62
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Infrastructure Fund",
+     "pct": 1.56
+    }
+   ]
+  },
+  "ANTELOPUS": {
+   "count": 0,
+   "top": []
+  },
+  "CONCOR": {
+   "count": 22,
+   "top": [
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Infrastructure Fund",
+     "pct": 2.71
+    },
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Infrastructure and Economic Reform Fund",
+     "pct": 1.31
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential PSU Equity Fund",
+     "pct": 1.08
+    },
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Transportation & Logistics Fund",
+     "pct": 1.06
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Large & Mid Cap Fund",
+     "pct": 0.86
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Transportation and Logistics Fund",
+     "pct": 0.85
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Exports and Services Fund",
+     "pct": 0.84
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Innovation Fund",
+     "pct": 0.78
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Power & Infra Fund",
+     "pct": 0.68
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Multi Cap Fund",
+     "pct": 0.61
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Growth Mid Cap Fund",
+     "pct": 0.51
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya An open ended fund for investment for children having a lock-in for at least 5 years or till the child attains age of majority",
+     "pct": 0.51
+    }
+   ]
+  },
+  "EIDPARRY": {
+   "count": 4,
+   "top": [
+    {
+     "amc": "SBI",
+     "scheme": "SBI Smallcap Fund",
+     "pct": 1.88
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Children's Fund - Investment Plan",
+     "pct": 1.06
+    },
+    {
+     "amc": "Quant",
+     "scheme": "quant Small Cap Fund",
+     "pct": 0.65
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Contra Fund",
+     "pct": 0.25
+    }
+   ]
+  },
+  "ENRIN": {
+   "count": 23,
+   "top": [
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Manufacturing Fund",
+     "pct": 3.71
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Focused Fund",
+     "pct": 3.6
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Active Momentum Fund",
+     "pct": 2.75
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Innovation Fund",
+     "pct": 2.73
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India MNC Fund theme)",
+     "pct": 2.63
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Energy Opportunities Fund",
+     "pct": 2.32
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Retirement Fund - Pure Equity Plan",
+     "pct": 1.97
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Flexi Cap Fund",
+     "pct": 1.79
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Retirement Fund - Hybrid Aggressive Plan",
+     "pct": 1.54
+    },
+    {
+     "amc": "Axis",
+     "scheme": "Axis Innovation Fund",
+     "pct": 1.49
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Infrastructure Fund",
+     "pct": 1.46
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya 31052026 ABSLMF Monthly",
+     "pct": 1.36
+    }
+   ]
+  },
+  "GMDCLTD": {
+   "count": 1,
+   "top": [
+    {
+     "amc": "Quant",
+     "scheme": "quant PSU Fund",
+     "pct": 8.54
+    }
+   ]
+  },
+  "GPPL": {
+   "count": 7,
+   "top": [
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Smallcap Fund",
+     "pct": 1.89
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Small Cap Fund",
+     "pct": 1.47
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Infrastructure Fund",
+     "pct": 1.3
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Business Cycle Fund",
+     "pct": 0.58
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Retirement Fund - Pure Equity Plan",
+     "pct": 0.44
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Transportation and Logistics Fund",
+     "pct": 0.22
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Large Cap Fund",
+     "pct": 0.02
+    }
+   ]
+  },
+  "HINDALCO": {
+   "count": 68,
+   "top": [
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Manufacturing Equity Fund",
+     "pct": 5.64
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Commodities Fund",
+     "pct": 5.29
+    },
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Manufacture In India Fund",
+     "pct": 4.11
+    },
+    {
+     "amc": "Axis",
+     "scheme": "Axis India Manufacturing Fund",
+     "pct": 3.64
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI ESG Exclusionary Strategy Fund",
+     "pct": 3.61
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Quant Fund",
+     "pct": 3.29
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life ESG Integration Strategy Fund",
+     "pct": 3.03
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Focused Fund",
+     "pct": 3.01
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life ELSS Tax Saver Fund",
+     "pct": 2.63
+    },
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Quant Fund",
+     "pct": 2.59
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Retirement Benefit Fund - Aggressive Plan",
+     "pct": 2.52
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Retirement Fund - the 40s Plan",
+     "pct": 2.52
+    }
+   ]
+  },
+  "IRCTC": {
+   "count": 8,
+   "top": [
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential PSU Equity Fund",
+     "pct": 2.79
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Rural Opportunities Fund",
+     "pct": 1.79
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Large & Mid Cap Fund",
+     "pct": 1.36
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Transportation and Logistics Fund",
+     "pct": 1.29
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Multicap Fund",
+     "pct": 0.57
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Midcap Fund",
+     "pct": 0.44
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life PSU Equity Fund",
+     "pct": 0.4
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Multi-Asset Fund",
+     "pct": 0.29
+    }
+   ]
+  },
+  "JUBLFOOD": {
+   "count": 46,
+   "top": [
+    {
+     "amc": "SBI",
+     "scheme": "SBI Consumption Opportunities Fund",
+     "pct": 4.02
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Bharat Consumption Fund",
+     "pct": 2.38
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI MultiCap Fund",
+     "pct": 2.03
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Focused Fund",
+     "pct": 1.93
+    },
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Consumption Fund",
+     "pct": 1.79
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Long Term Advantage Fund - Series VI",
+     "pct": 1.45
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Midcap Fund",
+     "pct": 1.44
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Retirement Benefit Fund - Aggressive Plan",
+     "pct": 1.35
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Mid Cap Fund",
+     "pct": 1.34
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Multi Cap Fund",
+     "pct": 1.25
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Consumption Fund",
+     "pct": 1.19
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Retirement Benefit Fund - Aggressive Hybrid Plan",
+     "pct": 1.13
+    }
+   ]
+  },
+  "LT": {
+   "count": 116,
+   "top": [
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Infrastructure and Economic Reform Fund",
+     "pct": 10.38
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Housing Opportunities Fund",
+     "pct": 7.56
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Infrastructure Fund",
+     "pct": 7.35
+    },
+    {
+     "amc": "Quant",
+     "scheme": "quant ELSS Tax Saver Fund",
+     "pct": 7.34
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Business Cycle Fund",
+     "pct": 7.12
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Power & Infra Fund",
+     "pct": 7.06
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Infrastructure Fund",
+     "pct": 6.82
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Infrastructure Fund",
+     "pct": 5.95
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Housing Opportunities Fund",
+     "pct": 5.76
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Infrastructure Fund",
+     "pct": 5.73
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Large Cap Fund",
+     "pct": 5.64
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Large Cap Fund",
+     "pct": 5.38
+    }
+   ]
+  },
+  "NMDC": {
+   "count": 17,
+   "top": [
+    {
+     "amc": "SBI",
+     "scheme": "SBI PSU Fund",
+     "pct": 3.72
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life PSU Equity Fund",
+     "pct": 3.52
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Comma Fund",
+     "pct": 3.23
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Dividend Yield Fund",
+     "pct": 2.66
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Quant Fund",
+     "pct": 2.6
+    },
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Active Momentum Fund",
+     "pct": 1.73
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Resources & Energy Fund",
+     "pct": 1.59
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Value Fund",
+     "pct": 1.24
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Flexicap Fund",
+     "pct": 1.23
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Manufacturing Equity Fund",
+     "pct": 0.93
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Value Fund",
+     "pct": 0.8
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Quant Fund",
+     "pct": 0.7
+    }
+   ]
+  },
+  "PGEL": {
+   "count": 19,
+   "top": [
+    {
+     "amc": "Tata",
+     "scheme": "Tata Housing Opportunities Fund",
+     "pct": 2.96
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Flexicap Fund",
+     "pct": 1.68
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Value Fund",
+     "pct": 1.67
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Small Cap Fund",
+     "pct": 1.14
+    },
+    {
+     "amc": "Nippon India",
+     "scheme": "Nippon India Consumption Fund",
+     "pct": 1.03
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata India Consumer Fund",
+     "pct": 0.73
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Smallcap Fund",
+     "pct": 0.67
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Multicap Fund",
+     "pct": 0.49
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Manufacturing Fund",
+     "pct": 0.44
+    },
+    {
+     "amc": "Axis",
+     "scheme": "Axis Retirement Fund - Dynamic Plan",
+     "pct": 0.43
+    },
+    {
+     "amc": "Axis",
+     "scheme": "Axis Retirement Fund - Aggressive Plan",
+     "pct": 0.41
+    },
+    {
+     "amc": "Axis",
+     "scheme": "Axis Aggressive Hybrid Fund",
+     "pct": 0.36
+    }
+   ]
+  },
+  "TATASTEEL": {
+   "count": 63,
+   "top": [
+    {
+     "amc": "SBI",
+     "scheme": "SBI Comma Fund",
+     "pct": 7.91
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Housing Opportunities Fund",
+     "pct": 4.9
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Resources & Energy Fund",
+     "pct": 4.52
+    },
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Manufacture In India Fund",
+     "pct": 4.4
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI ELSS Tax Saver Fund",
+     "pct": 4.12
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Flexicap Fund",
+     "pct": 3.38
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Long Term Advantage Fund - Series IV",
+     "pct": 3.26
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Active Momentum Fund",
+     "pct": 3.13
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Manufacturing Equity Fund",
+     "pct": 3.12
+    },
+    {
+     "amc": "Axis",
+     "scheme": "Axis India Manufacturing Fund",
+     "pct": 3.01
+    },
+    {
+     "amc": "Axis",
+     "scheme": "Axis Momentum Fund",
+     "pct": 2.52
+    },
+    {
+     "amc": "ICICI Prudential",
+     "scheme": "ICICI Prudential Commodities Fund",
+     "pct": 2.34
+    }
+   ]
+  },
+  "THERMAX": {
+   "count": 31,
+   "top": [
+    {
+     "amc": "SBI",
+     "scheme": "SBI Energy Opportunities Fund",
+     "pct": 5.5
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Innovative Opportunities Fund",
+     "pct": 4.04
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Midcap Fund",
+     "pct": 3.23
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Multicap Fund",
+     "pct": 2.72
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Large Cap Fund",
+     "pct": 2.7
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata India Innovation Fund",
+     "pct": 2.61
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Focused Fund",
+     "pct": 2.46
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI ESG Exclusionary Strategy Fund",
+     "pct": 2.28
+    },
+    {
+     "amc": "Kotak",
+     "scheme": "Kotak Flexicap Fund",
+     "pct": 1.98
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Multi Asset Allocation Fund",
+     "pct": 1.89
+    },
+    {
+     "amc": "SBI",
+     "scheme": "SBI Retirement Benefit Fund - Aggressive Plan",
+     "pct": 1.76
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Infrastructure Fund",
+     "pct": 1.61
+    }
+   ]
+  },
+  "DCBBANK": {
+   "count": 5,
+   "top": [
+    {
+     "amc": "Tata",
+     "scheme": "Tata Childrens Fund",
+     "pct": 1.79
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Small Cap Fund",
+     "pct": 1.71
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Banking & Financial Services Fund",
+     "pct": 1.66
+    },
+    {
+     "amc": "Tata",
+     "scheme": "Tata Business Cycle Fund",
+     "pct": 1.09
+    },
+    {
+     "amc": "Aditya Birla SL",
+     "scheme": "Aditya Birla Sun Life Small Cap Fund",
+     "pct": 1.04
+    }
+   ]
+  }
+ }
+}

@@ -10,3 +10,7 @@ dist-ssr
 # tsc -b build artifacts
 vite.config.js
 vite.config.d.ts
+
+# Python ingest cache
+__pycache__/
+*.pyc
