@@ -27,7 +27,7 @@ const NAV = [
   { to: "/family", label: "Family & Entities", icon: Users, group: "Allocation", demo: true },
   { to: "/research", label: "Broker Research", icon: FileText, group: "Intelligence", demo: true },
   { to: "/recommendations", label: "Recommendations", icon: Sparkles, group: "Action", demo: true },
-  { to: "/data-sources", label: "Data Sources", icon: Plug, group: "Admin", demo: true },
+  { to: "/data-sources", label: "Data Sources", icon: Plug, group: "Admin" },
 ] as const;
 
 const GROUP_ORDER = ["Setup", "Daily", "Allocation", "Analytics", "Intelligence", "Action", "Admin"];

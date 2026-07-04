@@ -41,12 +41,14 @@ const PEERS = peers as unknown as PeersFile;
 // Per stock: how many funds among the major houses we track hold it, and the
 // top ones by weight in the fund — the concrete "which funds hold my stocks".
 type FundHolder = { amc: string; scheme: string; pct: number };
+type FundOverlap = { amc: string; scheme: string; stocks: string[]; count: number; sumPct: number };
 type FundHoldersFile = {
   asOf: string | null;
   amcsCovered: string[];
   schemesParsed: number;
   notes: string[];
   stocks: Record<string, { count: number; top: FundHolder[] }>;
+  fundOverlap: FundOverlap[];
 };
 const FUNDS = fundHolders as unknown as FundHoldersFile;
 
@@ -130,6 +132,20 @@ export function PeerPositioning() {
     overlapPairs.length === 0
       ? "None of the tracked marquee individual investors currently hold your names — expected for a largely largecap, institution-owned book."
       : `${overlapPairs.length === 1 ? "The one overlap" : `${overlapPairs.length} overlaps`}: ${overlapPairs.join("; ")}. These investors concentrate in small/midcaps, so overlap lands on your smaller, less institution-owned names rather than your largecaps.`;
+
+  // Institutional accumulation vs distribution over the last ~year, from the
+  // 6-quarter ownership history (FII + DII). Positive = smart money adding.
+  const instFlows = covered
+    .map((r) => {
+      const h = r.peer!.history.filter((x) => x.fii != null || x.dii != null);
+      if (h.length < 2) return null;
+      const inst = (x: { fii: number | null; dii: number | null }) => n0(x.fii) + n0(x.dii);
+      return { key: r.key, delta: inst(h[h.length - 1]) - inst(h[Math.max(0, h.length - 5)]) };
+    })
+    .filter((f): f is { key: string; delta: number } => f != null)
+    .sort((a, b) => b.delta - a.delta);
+  const accumulating = instFlows.filter((f) => f.delta >= 0.5).slice(0, 6);
+  const distributing = instFlows.filter((f) => f.delta <= -0.5).slice(-6).reverse();
 
   return (
     <div className="pb-8">
@@ -295,6 +311,60 @@ export function PeerPositioning() {
           </table>
         </div>
       </Card>
+
+      {/* v2: institutional flows + fund crowding */}
+      <div className="mt-6 grid gap-4 lg:grid-cols-2">
+        <Card title="Institutional flows · 1 year" subtitle="Where funds & FIIs added to or trimmed your names (FII + DII, vs a year ago)">
+          {accumulating.length === 0 && distributing.length === 0 ? (
+            <p className="text-sm text-slate-400">Not enough history to show flows.</p>
+          ) : (
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <div className="mb-1.5 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wide text-emerald-600">
+                  <TrendingUp className="h-3.5 w-3.5" /> Accumulating
+                </div>
+                {accumulating.length ? accumulating.map((f) => (
+                  <div key={f.key} className="flex items-center justify-between border-b border-slate-200/50 py-1 text-[13px]">
+                    <span className="mono text-slate-200">{f.key}</span>
+                    <span className="mono text-gain">{pp(f.delta)}</span>
+                  </div>
+                )) : <div className="py-1 text-[12px] text-slate-400">—</div>}
+              </div>
+              <div>
+                <div className="mb-1.5 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wide text-rose-500">
+                  <TrendingDown className="h-3.5 w-3.5" /> Trimming
+                </div>
+                {distributing.length ? distributing.map((f) => (
+                  <div key={f.key} className="flex items-center justify-between border-b border-slate-200/50 py-1 text-[13px]">
+                    <span className="mono text-slate-200">{f.key}</span>
+                    <span className="mono text-loss">{pp(f.delta)}</span>
+                  </div>
+                )) : <div className="py-1 text-[12px] text-slate-400">—</div>}
+              </div>
+            </div>
+          )}
+        </Card>
+
+        <Card title="Fund crowding" subtitle="Single funds holding several of your names — a shared holder means correlated exit risk">
+          {FUNDS.fundOverlap.length > 0 ? (
+            <div className="space-y-1.5">
+              {FUNDS.fundOverlap.slice(0, 7).map((f) => (
+                <div key={`${f.amc}-${f.scheme}`} className="flex items-center justify-between gap-3 border-b border-slate-200/50 py-1.5">
+                  <span className="truncate text-[12.5px] text-slate-300" title={f.scheme}>{f.scheme}</span>
+                  <div className="flex shrink-0 flex-wrap justify-end gap-1">
+                    {f.stocks.slice(0, 6).map((t) => (
+                      <span key={t} className="mono rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-600">{t}</span>
+                    ))}
+                    {f.stocks.length > 6 && <span className="text-[10px] text-slate-400">+{f.stocks.length - 6}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-slate-400">No fund holds three or more of your names.</p>
+          )}
+        </Card>
+      </div>
 
       {/* Marquee investor overlap */}
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
