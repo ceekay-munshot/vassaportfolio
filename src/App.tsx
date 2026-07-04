@@ -9,6 +9,7 @@ import { CoreSatellite } from "@/pages/CoreSatellite";
 import { SectorComposition } from "@/pages/SectorComposition";
 import { RiskLeverage } from "@/pages/RiskLeverage";
 import { Valuation } from "@/pages/Valuation";
+import { PeerPositioning } from "@/pages/PeerPositioning";
 import { BrokerResearch } from "@/pages/BrokerResearch";
 import { SectorIntelligence } from "@/pages/SectorIntelligence";
 import { Recommendations } from "@/pages/Recommendations";
@@ -60,6 +61,7 @@ export default function App() {
             <Route path="/sectors" element={<Gate><SectorComposition /></Gate>} />
             <Route path="/risk" element={<Gate><RiskLeverage /></Gate>} />
             <Route path="/valuation" element={<Gate><Valuation /></Gate>} />
+            <Route path="/positioning" element={<Gate><PeerPositioning /></Gate>} />
             <Route path="/funds" element={<Gate><FundAnalytics /></Gate>} />
             <Route path="/capital-gains" element={<Gate><CapitalGains /></Gate>} />
             <Route path="/liquidity" element={<Gate><Liquidity /></Gate>} />

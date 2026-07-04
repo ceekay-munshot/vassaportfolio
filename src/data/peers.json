@@ -1,0 +1,1164 @@
+{
+ "asOf": {
+  "ownership": "2026-03-31",
+  "generated": null
+ },
+ "coverage": {
+  "stocks": 16,
+  "withOwnership": 15
+ },
+ "sources": [
+  "Tickertape \u2014 aggregate shareholding pattern (promoter / FII / DII / mutual fund / retail), from exchange filings",
+  "Trendlyne \u2014 superstar-shareholder portfolios (marquee individual investors)"
+ ],
+ "notes": [
+  "Ownership % are the latest each company disclosed to the exchanges.",
+  "'Mutual fund %' is the aggregate held by all funds; a fund-by-fund list is gated behind login and left for v2.",
+  "ENRIN (Siemens Energy India) is too newly listed to be covered yet \u2014 shown as awaiting disclosure, not estimated."
+ ],
+ "investors": [
+  {
+   "name": "Dolly Khanna",
+   "holdsNV": [
+    "ANTELOPUS"
+   ],
+   "portfolioSize": 34
+  },
+  {
+   "name": "Ashish Kacholia",
+   "holdsNV": [],
+   "portfolioSize": 70
+  },
+  {
+   "name": "Radhakishan Damani",
+   "holdsNV": [],
+   "portfolioSize": 13
+  },
+  {
+   "name": "Sunil Singhania",
+   "holdsNV": [],
+   "portfolioSize": 39
+  },
+  {
+   "name": "Ashish Dhawan",
+   "holdsNV": [],
+   "portfolioSize": 16
+  },
+  {
+   "name": "Akash Bhanshali",
+   "holdsNV": [],
+   "portfolioSize": 22
+  },
+  {
+   "name": "Anil Kumar Goel",
+   "holdsNV": [],
+   "portfolioSize": 39
+  },
+  {
+   "name": "Vijay Kedia",
+   "holdsNV": [],
+   "portfolioSize": 23
+  },
+  {
+   "name": "Nemish Shah",
+   "holdsNV": [],
+   "portfolioSize": 7
+  },
+  {
+   "name": "Madhusudan Kela",
+   "holdsNV": [],
+   "portfolioSize": 23
+  }
+ ],
+ "stocks": {
+  "ABB": {
+   "company": "ABB India",
+   "sid": "ABB",
+   "sector": "Industrials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 75.0,
+    "fii": 8.2,
+    "dii": 9.3,
+    "mf": 4.6,
+    "retail": 6.2,
+    "others": 1.4,
+    "institutional": 17.5
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 3.6,
+     "fii": 11.9,
+     "dii": 5.7,
+     "promoter": 75.0,
+     "retail": 6.2,
+     "others": 1.3
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 4.5,
+     "fii": 10.3,
+     "dii": 7.0,
+     "promoter": 75.0,
+     "retail": 6.4,
+     "others": 1.3
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 4.5,
+     "fii": 9.2,
+     "dii": 7.7,
+     "promoter": 75.0,
+     "retail": 6.6,
+     "others": 1.5
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 4.0,
+     "fii": 8.3,
+     "dii": 8.3,
+     "promoter": 75.0,
+     "retail": 6.9,
+     "others": 1.5
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 4.2,
+     "fii": 7.7,
+     "dii": 9.2,
+     "promoter": 75.0,
+     "retail": 6.6,
+     "others": 1.6
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 4.6,
+     "fii": 8.2,
+     "dii": 9.3,
+     "promoter": 75.0,
+     "retail": 6.2,
+     "others": 1.4
+    }
+   ],
+   "investors": []
+  },
+  "ANTELOPUS": {
+   "company": "Antelopus / Selan Energy",
+   "sid": "SELA",
+   "sector": "Energy",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 69.9,
+    "fii": 0.3,
+    "dii": 0.0,
+    "mf": 0,
+    "retail": 17.8,
+    "others": 11.9,
+    "institutional": 0.3
+   },
+   "history": [
+    {
+     "q": "2025-03-31",
+     "mf": 0,
+     "fii": 3.6,
+     "dii": 0.0,
+     "promoter": 30.5,
+     "retail": 38.1,
+     "others": 27.8
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 0,
+     "fii": 3.9,
+     "dii": 0.0,
+     "promoter": 30.5,
+     "retail": 39.6,
+     "others": 26.0
+    },
+    {
+     "q": "2025-08-31",
+     "mf": 0,
+     "fii": 1.7,
+     "dii": 0.0,
+     "promoter": 69.9,
+     "retail": 17.1,
+     "others": 11.2
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 0,
+     "fii": 1.7,
+     "dii": 0.0,
+     "promoter": 69.9,
+     "retail": 16.9,
+     "others": 11.4
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 0,
+     "fii": 0.2,
+     "dii": 0.0,
+     "promoter": 69.9,
+     "retail": 17.4,
+     "others": 12.4
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 0,
+     "fii": 0.3,
+     "dii": 0.0,
+     "promoter": 69.9,
+     "retail": 17.8,
+     "others": 11.9
+    }
+   ],
+   "investors": [
+    "Dolly Khanna"
+   ]
+  },
+  "CONCOR": {
+   "company": "Container Corp",
+   "sid": "CCRI",
+   "sector": "Industrials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 54.8,
+    "fii": 8.3,
+    "dii": 29.8,
+    "mf": 13.9,
+    "retail": 5.4,
+    "others": 1.7,
+    "institutional": 38.1
+   },
+   "history": [
+    {
+     "q": "2025-03-31",
+     "mf": 11.3,
+     "fii": 13.1,
+     "dii": 26.2,
+     "promoter": 54.8,
+     "retail": 4.5,
+     "others": 1.4
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 9.4,
+     "fii": 12.7,
+     "dii": 26.1,
+     "promoter": 54.8,
+     "retail": 4.9,
+     "others": 1.5
+    },
+    {
+     "q": "2025-07-31",
+     "mf": 9.2,
+     "fii": 12.7,
+     "dii": 26.0,
+     "promoter": 54.8,
+     "retail": 4.9,
+     "others": 1.6
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 9.3,
+     "fii": 12.4,
+     "dii": 25.8,
+     "promoter": 54.8,
+     "retail": 5.3,
+     "others": 1.7
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 12.6,
+     "fii": 9.1,
+     "dii": 28.7,
+     "promoter": 54.8,
+     "retail": 5.6,
+     "others": 1.9
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 13.9,
+     "fii": 8.3,
+     "dii": 29.8,
+     "promoter": 54.8,
+     "retail": 5.4,
+     "others": 1.7
+    }
+   ],
+   "investors": []
+  },
+  "EIDPARRY": {
+   "company": "EID Parry",
+   "sid": "EIDP",
+   "sector": "Consumer Staples",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 41.4,
+    "fii": 12.2,
+    "dii": 16.7,
+    "mf": 16.1,
+    "retail": 14.2,
+    "others": 15.4,
+    "institutional": 28.9
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 12.7,
+     "fii": 12.6,
+     "dii": 13.3,
+     "promoter": 41.7,
+     "retail": 15.5,
+     "others": 16.9
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 13.2,
+     "fii": 12.2,
+     "dii": 13.8,
+     "promoter": 41.6,
+     "retail": 15.3,
+     "others": 17.1
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 13.8,
+     "fii": 12.7,
+     "dii": 14.5,
+     "promoter": 41.5,
+     "retail": 14.7,
+     "others": 16.6
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 14.8,
+     "fii": 12.8,
+     "dii": 15.6,
+     "promoter": 41.5,
+     "retail": 14.4,
+     "others": 15.7
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 15.4,
+     "fii": 12.6,
+     "dii": 16.3,
+     "promoter": 41.4,
+     "retail": 14.2,
+     "others": 15.5
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 16.1,
+     "fii": 12.2,
+     "dii": 16.7,
+     "promoter": 41.4,
+     "retail": 14.2,
+     "others": 15.4
+    }
+   ],
+   "investors": []
+  },
+  "ENRIN": {
+   "company": "Siemens Energy India",
+   "sid": null,
+   "ownership": null,
+   "history": [],
+   "investors": []
+  },
+  "GMDCLTD": {
+   "company": "GMDC",
+   "sid": "GMDC",
+   "sector": "Materials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 74,
+    "fii": 3.8,
+    "dii": 0.9,
+    "mf": 0.5,
+    "retail": 15.4,
+    "others": 5.9,
+    "institutional": 4.7
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 0.1,
+     "fii": 1.9,
+     "dii": 0.7,
+     "promoter": 74,
+     "retail": 18.9,
+     "others": 4.4
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 0.1,
+     "fii": 2.1,
+     "dii": 0.8,
+     "promoter": 74,
+     "retail": 18.8,
+     "others": 4.3
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 0.1,
+     "fii": 2.2,
+     "dii": 0.8,
+     "promoter": 74,
+     "retail": 16.9,
+     "others": 6.1
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 0.1,
+     "fii": 3.3,
+     "dii": 0.8,
+     "promoter": 74,
+     "retail": 15.1,
+     "others": 6.9
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 0.4,
+     "fii": 2.3,
+     "dii": 0.9,
+     "promoter": 74,
+     "retail": 15.9,
+     "others": 6.9
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 0.5,
+     "fii": 3.8,
+     "dii": 0.9,
+     "promoter": 74,
+     "retail": 15.4,
+     "others": 5.9
+    }
+   ],
+   "investors": []
+  },
+  "GPPL": {
+   "company": "Gujarat Pipavav",
+   "sid": "GPPL",
+   "sector": "Industrials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 44.0,
+    "fii": 22.1,
+    "dii": 15.0,
+    "mf": 14.5,
+    "retail": 11.0,
+    "others": 7.9,
+    "institutional": 37.1
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 15.1,
+     "fii": 20.5,
+     "dii": 16.8,
+     "promoter": 44.0,
+     "retail": 10.7,
+     "others": 8.0
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 15.7,
+     "fii": 19.4,
+     "dii": 17.1,
+     "promoter": 44.0,
+     "retail": 11.2,
+     "others": 8.2
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 15.3,
+     "fii": 19.5,
+     "dii": 16.2,
+     "promoter": 44.0,
+     "retail": 11.9,
+     "others": 8.4
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 15.0,
+     "fii": 19.8,
+     "dii": 15.7,
+     "promoter": 44.0,
+     "retail": 11.9,
+     "others": 8.6
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 14.5,
+     "fii": 21.0,
+     "dii": 14.9,
+     "promoter": 44.0,
+     "retail": 11.3,
+     "others": 8.7
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 14.5,
+     "fii": 22.1,
+     "dii": 15.0,
+     "promoter": 44.0,
+     "retail": 11.0,
+     "others": 7.9
+    }
+   ],
+   "investors": []
+  },
+  "HINDALCO": {
+   "company": "Hindalco",
+   "sid": "HALC",
+   "sector": "Materials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 34.6,
+    "fii": 34.1,
+    "dii": 21.5,
+    "mf": 11.4,
+    "retail": 5.0,
+    "others": 4.8,
+    "institutional": 55.6
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 13.3,
+     "fii": 31.7,
+     "dii": 24.6,
+     "promoter": 34.6,
+     "retail": 5.1,
+     "others": 3.9
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 13.3,
+     "fii": 31.9,
+     "dii": 24.7,
+     "promoter": 34.6,
+     "retail": 4.9,
+     "others": 3.8
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 13.7,
+     "fii": 31.4,
+     "dii": 25.1,
+     "promoter": 34.6,
+     "retail": 5.0,
+     "others": 3.9
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 12.9,
+     "fii": 32.1,
+     "dii": 24.2,
+     "promoter": 34.6,
+     "retail": 4.9,
+     "others": 4.1
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 13.3,
+     "fii": 32.3,
+     "dii": 23.3,
+     "promoter": 34.6,
+     "retail": 5.1,
+     "others": 4.7
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 11.4,
+     "fii": 34.1,
+     "dii": 21.5,
+     "promoter": 34.6,
+     "retail": 5.0,
+     "others": 4.8
+    }
+   ],
+   "investors": []
+  },
+  "IRCTC": {
+   "company": "IRCTC",
+   "sid": "INIR",
+   "sector": "Communication Services",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 62.4,
+    "fii": 4.9,
+    "dii": 14.9,
+    "mf": 3.3,
+    "retail": 16.4,
+    "others": 1.5,
+    "institutional": 19.8
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 3.0,
+     "fii": 7.5,
+     "dii": 13.7,
+     "promoter": 62.4,
+     "retail": 15.3,
+     "others": 1.1
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 2.9,
+     "fii": 7.4,
+     "dii": 13.9,
+     "promoter": 62.4,
+     "retail": 15.2,
+     "others": 1.1
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 3.1,
+     "fii": 7.3,
+     "dii": 14.2,
+     "promoter": 62.4,
+     "retail": 15.1,
+     "others": 1.1
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 2.9,
+     "fii": 7.3,
+     "dii": 14.2,
+     "promoter": 62.4,
+     "retail": 15.1,
+     "others": 1.1
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 2.5,
+     "fii": 7.2,
+     "dii": 14.0,
+     "promoter": 62.4,
+     "retail": 15.3,
+     "others": 1.1
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 3.3,
+     "fii": 4.9,
+     "dii": 14.9,
+     "promoter": 62.4,
+     "retail": 16.4,
+     "others": 1.5
+    }
+   ],
+   "investors": []
+  },
+  "JUBLFOOD": {
+   "company": "Jubilant FoodWorks",
+   "sid": "JUBI",
+   "sector": "Consumer Discretionary",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 40.3,
+    "fii": 17.3,
+    "dii": 36.6,
+    "mf": 30.3,
+    "retail": 4.0,
+    "others": 1.9,
+    "institutional": 53.9
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 25.0,
+     "fii": 21.3,
+     "dii": 30.4,
+     "promoter": 41.9,
+     "retail": 4.2,
+     "others": 2.2
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 25.8,
+     "fii": 20.5,
+     "dii": 31.2,
+     "promoter": 41.9,
+     "retail": 4.0,
+     "others": 2.3
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 26.8,
+     "fii": 21.0,
+     "dii": 32.5,
+     "promoter": 40.3,
+     "retail": 4.0,
+     "others": 2.2
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 27.3,
+     "fii": 20.1,
+     "dii": 33.2,
+     "promoter": 40.3,
+     "retail": 4.1,
+     "others": 2.2
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 28.5,
+     "fii": 18.6,
+     "dii": 35.0,
+     "promoter": 40.3,
+     "retail": 4.1,
+     "others": 2.1
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 30.3,
+     "fii": 17.3,
+     "dii": 36.6,
+     "promoter": 40.3,
+     "retail": 4.0,
+     "others": 1.9
+    }
+   ],
+   "investors": []
+  },
+  "LT": {
+   "company": "Larsen & Toubro",
+   "sid": "LART",
+   "sector": "Industrials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 0,
+    "fii": 18.8,
+    "dii": 43.3,
+    "mf": 20.5,
+    "retail": 18.9,
+    "others": 19.0,
+    "institutional": 62.1
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 19.7,
+     "fii": 20.8,
+     "dii": 41.7,
+     "promoter": 0,
+     "retail": 18.9,
+     "others": 18.6
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 19.9,
+     "fii": 19.8,
+     "dii": 42.7,
+     "promoter": 0,
+     "retail": 18.9,
+     "others": 18.6
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 20.1,
+     "fii": 19.1,
+     "dii": 43.0,
+     "promoter": 0,
+     "retail": 18.5,
+     "others": 19.4
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 20.3,
+     "fii": 19.3,
+     "dii": 42.9,
+     "promoter": 0,
+     "retail": 18.5,
+     "others": 19.3
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 20.2,
+     "fii": 19.8,
+     "dii": 42.5,
+     "promoter": 0,
+     "retail": 18.3,
+     "others": 19.3
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 20.5,
+     "fii": 18.8,
+     "dii": 43.3,
+     "promoter": 0,
+     "retail": 18.9,
+     "others": 19.0
+    }
+   ],
+   "investors": []
+  },
+  "NMDC": {
+   "company": "NMDC",
+   "sid": "NMDC",
+   "sector": "Materials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 60.8,
+    "fii": 13.6,
+    "dii": 13.8,
+    "mf": 6.7,
+    "retail": 8.6,
+    "others": 3.3,
+    "institutional": 27.4
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 6.9,
+     "fii": 12.1,
+     "dii": 14.5,
+     "promoter": 60.8,
+     "retail": 8.9,
+     "others": 3.7
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 7.4,
+     "fii": 11.7,
+     "dii": 15.1,
+     "promoter": 60.8,
+     "retail": 8.9,
+     "others": 3.4
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 7.1,
+     "fii": 12.2,
+     "dii": 14.5,
+     "promoter": 60.8,
+     "retail": 9.0,
+     "others": 3.5
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 7.2,
+     "fii": 13.0,
+     "dii": 14.4,
+     "promoter": 60.8,
+     "retail": 8.5,
+     "others": 3.3
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 7.1,
+     "fii": 13.5,
+     "dii": 14.1,
+     "promoter": 60.8,
+     "retail": 8.4,
+     "others": 3.2
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 6.7,
+     "fii": 13.6,
+     "dii": 13.8,
+     "promoter": 60.8,
+     "retail": 8.6,
+     "others": 3.3
+    }
+   ],
+   "investors": []
+  },
+  "PGEL": {
+   "company": "PG Electroplast",
+   "sid": "PGEL",
+   "sector": "Information Technology",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 43.4,
+    "fii": 9.7,
+    "dii": 24.5,
+    "mf": 19.4,
+    "retail": 15.9,
+    "others": 6.5,
+    "institutional": 34.2
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 10.5,
+     "fii": 10.3,
+     "dii": 16.2,
+     "promoter": 49.4,
+     "retail": 15.0,
+     "others": 9.2
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 11.2,
+     "fii": 10.5,
+     "dii": 16.4,
+     "promoter": 49.4,
+     "retail": 14.9,
+     "others": 8.9
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 13.3,
+     "fii": 13.0,
+     "dii": 18.1,
+     "promoter": 43.7,
+     "retail": 17.3,
+     "others": 7.9
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 14.5,
+     "fii": 11.5,
+     "dii": 18.8,
+     "promoter": 43.6,
+     "retail": 18.8,
+     "others": 7.3
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 18.7,
+     "fii": 10.6,
+     "dii": 22.7,
+     "promoter": 43.4,
+     "retail": 16.5,
+     "others": 6.8
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 19.4,
+     "fii": 9.7,
+     "dii": 24.5,
+     "promoter": 43.4,
+     "retail": 15.9,
+     "others": 6.5
+    }
+   ],
+   "investors": []
+  },
+  "TATASTEEL": {
+   "company": "Tata Steel",
+   "sid": "TISC",
+   "sector": "Materials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 33.2,
+    "fii": 19.1,
+    "dii": 26.9,
+    "mf": 14.5,
+    "retail": 15.9,
+    "others": 5.0,
+    "institutional": 46.0
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 11.7,
+     "fii": 19.0,
+     "dii": 23.7,
+     "promoter": 33.2,
+     "retail": 18.8,
+     "others": 5.3
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 12.0,
+     "fii": 18.8,
+     "dii": 24.7,
+     "promoter": 33.2,
+     "retail": 18.1,
+     "others": 5.3
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 13.2,
+     "fii": 17.7,
+     "dii": 26.3,
+     "promoter": 33.2,
+     "retail": 17.6,
+     "others": 5.2
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 14.4,
+     "fii": 17.8,
+     "dii": 27.1,
+     "promoter": 33.2,
+     "retail": 16.8,
+     "others": 5.2
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 14.6,
+     "fii": 18.0,
+     "dii": 27.2,
+     "promoter": 33.2,
+     "retail": 16.5,
+     "others": 5.2
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 14.5,
+     "fii": 19.1,
+     "dii": 26.9,
+     "promoter": 33.2,
+     "retail": 15.9,
+     "others": 5.0
+    }
+   ],
+   "investors": []
+  },
+  "THERMAX": {
+   "company": "Thermax",
+   "sid": "THMX",
+   "sector": "Industrials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 62.0,
+    "fii": 11.2,
+    "dii": 15.5,
+    "mf": 13.7,
+    "retail": 4.6,
+    "others": 6.7,
+    "institutional": 26.7
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 11.9,
+     "fii": 15.5,
+     "dii": 12.7,
+     "promoter": 62.0,
+     "retail": 3.5,
+     "others": 6.4
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 11.3,
+     "fii": 15.9,
+     "dii": 12.3,
+     "promoter": 62.0,
+     "retail": 3.5,
+     "others": 6.4
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 10.7,
+     "fii": 16.0,
+     "dii": 11.7,
+     "promoter": 62.0,
+     "retail": 3.8,
+     "others": 6.4
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 12.6,
+     "fii": 13.4,
+     "dii": 14.0,
+     "promoter": 62.0,
+     "retail": 4.1,
+     "others": 6.6
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 13.3,
+     "fii": 12.4,
+     "dii": 14.8,
+     "promoter": 62.0,
+     "retail": 4.3,
+     "others": 6.5
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 13.7,
+     "fii": 11.2,
+     "dii": 15.5,
+     "promoter": 62.0,
+     "retail": 4.6,
+     "others": 6.7
+    }
+   ],
+   "investors": []
+  },
+  "DCBBANK": {
+   "company": "DCB Bank",
+   "sid": "DCBA",
+   "sector": "Financials",
+   "ownership": {
+    "asOf": "2026-03-31",
+    "promoter": 16.2,
+    "fii": 12.6,
+    "dii": 32.8,
+    "mf": 24.2,
+    "retail": 17.5,
+    "others": 20.8,
+    "institutional": 45.4
+   },
+   "history": [
+    {
+     "q": "2024-12-31",
+     "mf": 19.5,
+     "fii": 10.9,
+     "dii": 27.9,
+     "promoter": 14.7,
+     "retail": 25.4,
+     "others": 21.1
+    },
+    {
+     "q": "2025-03-31",
+     "mf": 19.7,
+     "fii": 9.6,
+     "dii": 29.2,
+     "promoter": 14.7,
+     "retail": 24.7,
+     "others": 21.7
+    },
+    {
+     "q": "2025-06-30",
+     "mf": 21.8,
+     "fii": 11.7,
+     "dii": 31.8,
+     "promoter": 14.7,
+     "retail": 21.5,
+     "others": 20.3
+    },
+    {
+     "q": "2025-09-30",
+     "mf": 21.5,
+     "fii": 10.5,
+     "dii": 31.9,
+     "promoter": 14.7,
+     "retail": 21.8,
+     "others": 21.1
+    },
+    {
+     "q": "2025-12-31",
+     "mf": 21.7,
+     "fii": 11.9,
+     "dii": 32.1,
+     "promoter": 16.2,
+     "retail": 18.2,
+     "others": 21.4
+    },
+    {
+     "q": "2026-03-31",
+     "mf": 24.2,
+     "fii": 12.6,
+     "dii": 32.8,
+     "promoter": 16.2,
+     "retail": 17.5,
+     "others": 20.8
+    }
+   ],
+   "investors": []
+  }
+ }
+}

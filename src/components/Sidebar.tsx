@@ -9,6 +9,7 @@ import {
   FileText,
   Sparkles,
   Users,
+  Radar,
   Lock,
   Plug,
 } from "lucide-react";
@@ -20,6 +21,7 @@ const NAV = [
   { to: "/monitor", label: "Portfolio Monitor", icon: LineChart, group: "Daily" },
   { to: "/risk", label: "Risk & Leverage", icon: ShieldAlert, group: "Analytics" },
   { to: "/valuation", label: "Fundamentals", icon: Calculator, group: "Analytics" },
+  { to: "/positioning", label: "Peer Positioning", icon: Radar, group: "Analytics" },
   { to: "/cio", label: "Morning CIO", icon: Sunrise, group: "Daily" },
   { to: "/sectors", label: "Sector Composition", icon: PieChart, group: "Allocation" },
   { to: "/family", label: "Family & Entities", icon: Users, group: "Allocation", demo: true },
