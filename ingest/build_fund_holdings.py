@@ -47,8 +47,11 @@ AMCS = [
     # (Sebi-exposure / futures / risk-o-meter), not the standard per-scheme portfolio.
     ("Aditya-Birla-Sun-Life-Mutual-Fund", "Aditya Birla SL"),
     ("Quant-Mutual-Fund", "Quant"),
-    ("Motilal-Oswal-Mutual-Fund", "Motilal Oswal"),
     ("Tata-Mutual-Fund", "Tata"),
+    ("Franklin-Templeton-Mutual-Fund", "Franklin Templeton"),
+    ("LIC-Mutual-Fund", "LIC MF"),
+    ("Sundaram-Mutual-Fund", "Sundaram"),
+    ("Edelweiss-Mutual-Fund", "Edelweiss"),
 ]
 
 ISIN_RE = re.compile(r"^IN[EF][0-9A-Z]{9}$")
@@ -264,8 +267,12 @@ def main():
             for scheme, holdings in parse_any(tp, disp):
                 if scheme == disp:      # a sheet we couldn't name (bare AMC) — skip, don't show a blank fund
                     continue
-                n_schemes += 1
                 nice = normalize_scheme(scheme, disp)
+                # Drop non-scheme tabs (exposure summaries, date-coded sheets):
+                # a real equity scheme name reads like "… Fund", not "ABSLMF 31052026".
+                if "fund" not in nice.lower() or re.search(r"\d{5,}", nice):
+                    continue
+                n_schemes += 1
                 for isin, _name, pct in holdings:
                     stocks[NV_ISIN[isin]].append({"amc": disp, "scheme": nice, "pct": pct})
                     n_hits += 1
@@ -287,6 +294,26 @@ def main():
         stocks[tkr] = sorted(best.values(), key=lambda x: -x["pct"])
     summary = {tkr: {"count": len(v), "top": v[:12]} for tkr, v in stocks.items()}
 
+    # Fund crowding: single funds that hold SEVERAL of NV's names. If one such
+    # fund rotates out, multiple positions feel it at once — a concentration/
+    # correlated-exit risk worth seeing.
+    fund_idx = {}  # (amc, scheme) -> {ticker: pct}
+    for tkr, funds in stocks.items():
+        for e in funds:
+            fund_idx.setdefault((e["amc"], e["scheme"]), {})[tkr] = e["pct"]
+    fund_overlap = sorted(
+        (
+            {
+                "amc": amc, "scheme": scheme,
+                "stocks": sorted(held, key=lambda t: -held[t]),
+                "count": len(held),
+                "sumPct": round(sum(held.values()), 1),
+            }
+            for (amc, scheme), held in fund_idx.items() if len(held) >= 3
+        ),
+        key=lambda x: (-x["count"], -x["sumPct"]),
+    )[:15]
+
     out = {
         "asOf": as_of,
         "amcsCovered": amcs_done,
@@ -300,6 +327,7 @@ def main():
             "% is the stock's weight in that fund, from the fund's latest official monthly disclosure.",
         ],
         "stocks": summary,
+        "fundOverlap": fund_overlap,
     }
     with open("src/data/fundHolders.json", "w") as f:
         json.dump(out, f, indent=1)

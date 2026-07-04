@@ -8,20 +8,22 @@
   "Axis",
   "Aditya Birla SL",
   "Quant",
-  "Tata"
+  "Tata",
+  "Franklin Templeton",
+  "Sundaram"
  ],
- "schemesParsed": 187,
+ "schemesParsed": 226,
  "sources": [
   "AMC monthly portfolio disclosures (SEBI-mandated), discovered via AdvisorKhoj's download centre."
  ],
  "notes": [
-  "Covers 8 major fund houses, not all ~44 AMCs \u2014 a transparent subset, not exhaustive.",
+  "Covers 10 major fund houses, not all ~44 AMCs \u2014 a transparent subset, not exhaustive.",
   "Index funds, ETFs and pure debt/liquid schemes are excluded (they hold mechanically, not by conviction).",
   "% is the stock's weight in that fund, from the fund's latest official monthly disclosure."
  ],
  "stocks": {
   "ABB": {
-   "count": 38,
+   "count": 42,
    "top": [
     {
      "amc": "Kotak",
@@ -74,14 +76,14 @@
      "pct": 1.76
     },
     {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Multi-Factor Fund",
+     "pct": 1.66
+    },
+    {
      "amc": "SBI",
      "scheme": "SBI Retirement Benefit Fund - Aggressive Plan",
      "pct": 1.62
-    },
-    {
-     "amc": "ICICI Prudential",
-     "scheme": "ICICI Prudential Infrastructure Fund",
-     "pct": 1.56
     }
    ]
   },
@@ -90,7 +92,7 @@
    "top": []
   },
   "CONCOR": {
-   "count": 22,
+   "count": 26,
    "top": [
     {
      "amc": "ICICI Prudential",
@@ -143,20 +145,25 @@
      "pct": 0.61
     },
     {
-     "amc": "Nippon India",
-     "scheme": "Nippon India Growth Mid Cap Fund",
-     "pct": 0.51
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Mid Cap Fund ^",
+     "pct": 0.57
     },
     {
-     "amc": "Aditya Birla SL",
-     "scheme": "Aditya An open ended fund for investment for children having a lock-in for at least 5 years or till the child attains age of majority",
-     "pct": 0.51
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Multi Cap Fund",
+     "pct": 0.54
     }
    ]
   },
   "EIDPARRY": {
-   "count": 4,
+   "count": 11,
    "top": [
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Small Cap Fund",
+     "pct": 2.15
+    },
     {
      "amc": "SBI",
      "scheme": "SBI Smallcap Fund",
@@ -166,6 +173,36 @@
      "amc": "SBI",
      "scheme": "SBI Children's Fund - Investment Plan",
      "pct": 1.06
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Long Term Tax Advantage Fund Series III",
+     "pct": 0.75
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Long Term Micro Cap Tax Advantage Fund Series III",
+     "pct": 0.74
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Long Term Micro Cap Tax Advantage Fund Series IV",
+     "pct": 0.73
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Long Term Micro Cap Tax Advantage Fund Series V",
+     "pct": 0.73
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Long Term Micro Cap Tax Advantage Fund Series VI",
+     "pct": 0.73
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Long Term Tax Advantage Fund Series IV",
+     "pct": 0.72
     },
     {
      "amc": "Quant",
@@ -180,7 +217,7 @@
    ]
   },
   "ENRIN": {
-   "count": 23,
+   "count": 25,
    "top": [
     {
      "amc": "ICICI Prudential",
@@ -238,9 +275,9 @@
      "pct": 1.46
     },
     {
-     "amc": "Aditya Birla SL",
-     "scheme": "Aditya 31052026 ABSLMF Monthly",
-     "pct": 1.36
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Mid Cap Fund ^",
+     "pct": 1.38
     }
    ]
   },
@@ -295,7 +332,7 @@
    ]
   },
   "HINDALCO": {
-   "count": 68,
+   "count": 78,
    "top": [
     {
      "amc": "Aditya Birla SL",
@@ -405,7 +442,7 @@
    ]
   },
   "JUBLFOOD": {
-   "count": 46,
+   "count": 61,
    "top": [
     {
      "amc": "SBI",
@@ -416,6 +453,11 @@
      "amc": "ICICI Prudential",
      "scheme": "ICICI Prudential Bharat Consumption Fund",
      "pct": 2.38
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Consumption Fund",
+     "pct": 2.25
     },
     {
      "amc": "SBI",
@@ -433,6 +475,16 @@
      "pct": 1.79
     },
     {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Large Cap Fund",
+     "pct": 1.5
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Multi Cap Fund",
+     "pct": 1.48
+    },
+    {
      "amc": "SBI",
      "scheme": "SBI Long Term Advantage Fund - Series VI",
      "pct": 1.45
@@ -443,39 +495,34 @@
      "pct": 1.44
     },
     {
-     "amc": "SBI",
-     "scheme": "SBI Retirement Benefit Fund - Aggressive Plan",
-     "pct": 1.35
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Focused Equity Fund",
+     "pct": 1.41
     },
     {
-     "amc": "Tata",
-     "scheme": "Tata Mid Cap Fund",
-     "pct": 1.34
-    },
-    {
-     "amc": "Nippon India",
-     "scheme": "Nippon India Multi Cap Fund",
-     "pct": 1.25
-    },
-    {
-     "amc": "Nippon India",
-     "scheme": "Nippon India Consumption Fund",
-     "pct": 1.19
-    },
-    {
-     "amc": "SBI",
-     "scheme": "SBI Retirement Benefit Fund - Aggressive Hybrid Plan",
-     "pct": 1.13
+     "amc": "Sundaram",
+     "scheme": "Sundaram Mid Cap Fund",
+     "pct": 1.38
     }
    ]
   },
   "LT": {
-   "count": 116,
+   "count": 139,
    "top": [
     {
      "amc": "Kotak",
      "scheme": "Kotak Infrastructure and Economic Reform Fund",
      "pct": 10.38
+    },
+    {
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin Build India Fund",
+     "pct": 9.35
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Infrastructure Advantage Fund",
+     "pct": 8.59
     },
     {
      "amc": "ICICI Prudential",
@@ -521,16 +568,6 @@
      "amc": "Aditya Birla SL",
      "scheme": "Aditya Birla Sun Life Infrastructure Fund",
      "pct": 5.73
-    },
-    {
-     "amc": "SBI",
-     "scheme": "SBI Large Cap Fund",
-     "pct": 5.64
-    },
-    {
-     "amc": "ICICI Prudential",
-     "scheme": "ICICI Prudential Large Cap Fund",
-     "pct": 5.38
     }
    ]
   },
@@ -600,7 +637,7 @@
    ]
   },
   "PGEL": {
-   "count": 19,
+   "count": 23,
    "top": [
     {
      "amc": "Tata",
@@ -618,9 +655,24 @@
      "pct": 1.67
     },
     {
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Opportunities Fund",
+     "pct": 1.35
+    },
+    {
      "amc": "Aditya Birla SL",
      "scheme": "Aditya Birla Sun Life Small Cap Fund",
      "pct": 1.14
+    },
+    {
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Multi Asset Allocation Fund",
+     "pct": 1.13
+    },
+    {
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Small Cap Fund ^",
+     "pct": 1.1
     },
     {
      "amc": "Nippon India",
@@ -638,34 +690,19 @@
      "pct": 0.67
     },
     {
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Flexi Cap Fund ^",
+     "pct": 0.67
+    },
+    {
      "amc": "ICICI Prudential",
      "scheme": "ICICI Prudential Multicap Fund",
      "pct": 0.49
-    },
-    {
-     "amc": "ICICI Prudential",
-     "scheme": "ICICI Prudential Manufacturing Fund",
-     "pct": 0.44
-    },
-    {
-     "amc": "Axis",
-     "scheme": "Axis Retirement Fund - Dynamic Plan",
-     "pct": 0.43
-    },
-    {
-     "amc": "Axis",
-     "scheme": "Axis Retirement Fund - Aggressive Plan",
-     "pct": 0.41
-    },
-    {
-     "amc": "Axis",
-     "scheme": "Axis Aggressive Hybrid Fund",
-     "pct": 0.36
     }
    ]
   },
   "TATASTEEL": {
-   "count": 63,
+   "count": 84,
    "top": [
     {
      "amc": "SBI",
@@ -693,6 +730,11 @@
      "pct": 4.12
     },
     {
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Focused Equity Fund",
+     "pct": 4.07
+    },
+    {
      "amc": "SBI",
      "scheme": "SBI Flexicap Fund",
      "pct": 3.38
@@ -718,19 +760,14 @@
      "pct": 3.01
     },
     {
-     "amc": "Axis",
-     "scheme": "Axis Momentum Fund",
-     "pct": 2.52
-    },
-    {
-     "amc": "ICICI Prudential",
-     "scheme": "ICICI Prudential Commodities Fund",
-     "pct": 2.34
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin Build India Fund",
+     "pct": 2.6
     }
    ]
   },
   "THERMAX": {
-   "count": 31,
+   "count": 35,
    "top": [
     {
      "amc": "SBI",
@@ -773,6 +810,11 @@
      "pct": 2.28
     },
     {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Infrastructure Advantage Fund",
+     "pct": 2.0
+    },
+    {
      "amc": "Kotak",
      "scheme": "Kotak Flexicap Fund",
      "pct": 1.98
@@ -786,17 +828,22 @@
      "amc": "SBI",
      "scheme": "SBI Retirement Benefit Fund - Aggressive Plan",
      "pct": 1.76
-    },
-    {
-     "amc": "Aditya Birla SL",
-     "scheme": "Aditya Birla Sun Life Infrastructure Fund",
-     "pct": 1.61
     }
    ]
   },
   "DCBBANK": {
-   "count": 5,
+   "count": 9,
    "top": [
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Financial Services Opportunities Fund",
+     "pct": 4.17
+    },
+    {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Small Cap Fund",
+     "pct": 2.12
+    },
     {
      "amc": "Tata",
      "scheme": "Tata Childrens Fund",
@@ -813,6 +860,16 @@
      "pct": 1.66
     },
     {
+     "amc": "Sundaram",
+     "scheme": "Sundaram Multi Cap Fund",
+     "pct": 1.56
+    },
+    {
+     "amc": "Franklin Templeton",
+     "scheme": "Franklin India Small Cap Fund ^",
+     "pct": 1.54
+    },
+    {
      "amc": "Tata",
      "scheme": "Tata Business Cycle Fund",
      "pct": 1.09
@@ -824,5 +881,210 @@
     }
    ]
   }
- }
+ },
+ "fundOverlap": [
+  {
+   "amc": "ICICI Prudential",
+   "scheme": "ICICI Prudential Multicap Fund",
+   "stocks": [
+    "ABB",
+    "TATASTEEL",
+    "HINDALCO",
+    "THERMAX",
+    "LT",
+    "IRCTC",
+    "PGEL",
+    "ENRIN"
+   ],
+   "count": 8,
+   "sumPct": 7.0
+  },
+  {
+   "amc": "ICICI Prudential",
+   "scheme": "ICICI Prudential Balanced Advantage Fund",
+   "stocks": [
+    "LT",
+    "TATASTEEL",
+    "CONCOR",
+    "PGEL",
+    "HINDALCO",
+    "ABB",
+    "JUBLFOOD"
+   ],
+   "count": 7,
+   "sumPct": 4.1
+  },
+  {
+   "amc": "Sundaram",
+   "scheme": "Sundaram Infrastructure Advantage Fund",
+   "stocks": [
+    "LT",
+    "THERMAX",
+    "ABB",
+    "ENRIN",
+    "TATASTEEL",
+    "CONCOR"
+   ],
+   "count": 6,
+   "sumPct": 13.6
+  },
+  {
+   "amc": "ICICI Prudential",
+   "scheme": "ICICI Prudential Retirement Fund - Pure Equity Plan",
+   "stocks": [
+    "ABB",
+    "LT",
+    "ENRIN",
+    "THERMAX",
+    "GPPL",
+    "PGEL"
+   ],
+   "count": 6,
+   "sumPct": 7.6
+  },
+  {
+   "amc": "Nippon India",
+   "scheme": "Nippon India Multi Cap Fund",
+   "stocks": [
+    "LT",
+    "ENRIN",
+    "JUBLFOOD",
+    "TATASTEEL",
+    "ABB",
+    "CONCOR"
+   ],
+   "count": 6,
+   "sumPct": 6.5
+  },
+  {
+   "amc": "SBI",
+   "scheme": "SBI ESG Exclusionary Strategy Fund",
+   "stocks": [
+    "LT",
+    "HINDALCO",
+    "THERMAX",
+    "ABB",
+    "JUBLFOOD"
+   ],
+   "count": 5,
+   "sumPct": 13.6
+  },
+  {
+   "amc": "Aditya Birla SL",
+   "scheme": "Aditya Birla Sun Life Manufacturing Equity Fund",
+   "stocks": [
+    "HINDALCO",
+    "TATASTEEL",
+    "THERMAX",
+    "ABB",
+    "NMDC"
+   ],
+   "count": 5,
+   "sumPct": 12.2
+  },
+  {
+   "amc": "SBI",
+   "scheme": "SBI Retirement Benefit Fund - Aggressive Plan",
+   "stocks": [
+    "LT",
+    "HINDALCO",
+    "THERMAX",
+    "ABB",
+    "JUBLFOOD"
+   ],
+   "count": 5,
+   "sumPct": 11.5
+  },
+  {
+   "amc": "SBI",
+   "scheme": "SBI ELSS Tax Saver Fund",
+   "stocks": [
+    "TATASTEEL",
+    "LT",
+    "HINDALCO",
+    "THERMAX",
+    "JUBLFOOD"
+   ],
+   "count": 5,
+   "sumPct": 10.2
+  },
+  {
+   "amc": "Nippon India",
+   "scheme": "Nippon India Power & Infra Fund",
+   "stocks": [
+    "LT",
+    "ENRIN",
+    "CONCOR",
+    "ABB",
+    "TATASTEEL"
+   ],
+   "count": 5,
+   "sumPct": 9.9
+  },
+  {
+   "amc": "SBI",
+   "scheme": "SBI Retirement Benefit Fund - Aggressive Hybrid Plan",
+   "stocks": [
+    "LT",
+    "HINDALCO",
+    "THERMAX",
+    "JUBLFOOD",
+    "ABB"
+   ],
+   "count": 5,
+   "sumPct": 9.2
+  },
+  {
+   "amc": "Franklin Templeton",
+   "scheme": "Franklin India Flexi Cap Fund ^",
+   "stocks": [
+    "LT",
+    "TATASTEEL",
+    "HINDALCO",
+    "PGEL",
+    "JUBLFOOD"
+   ],
+   "count": 5,
+   "sumPct": 8.7
+  },
+  {
+   "amc": "Nippon India",
+   "scheme": "Nippon India Large Cap Fund",
+   "stocks": [
+    "LT",
+    "TATASTEEL",
+    "ABB",
+    "ENRIN",
+    "JUBLFOOD"
+   ],
+   "count": 5,
+   "sumPct": 7.2
+  },
+  {
+   "amc": "ICICI Prudential",
+   "scheme": "ICICI Prudential Large Cap Fund",
+   "stocks": [
+    "LT",
+    "TATASTEEL",
+    "ABB",
+    "CONCOR",
+    "GPPL"
+   ],
+   "count": 5,
+   "sumPct": 6.4
+  },
+  {
+   "amc": "Aditya Birla SL",
+   "scheme": "Aditya Birla Sun Life Multi Asset Allocation Fund",
+   "stocks": [
+    "THERMAX",
+    "HINDALCO",
+    "LT",
+    "TATASTEEL",
+    "CONCOR"
+   ],
+   "count": 5,
+   "sumPct": 5.5
+  }
+ ]
 }
