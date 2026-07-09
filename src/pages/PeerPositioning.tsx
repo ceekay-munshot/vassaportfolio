@@ -221,11 +221,18 @@ export function PeerPositioning() {
                 const pos = positioning(n0(r.o.institutional));
                 const funds = FUNDS.stocks[r.key];
                 const isOpen = expanded === r.key;
+                const hasFunds = funds != null && funds.count > 0;
                 return (
                   <Fragment key={r.key}>
-                    <tr className="hover:bg-slate-800/30">
+                    <tr
+                      onClick={hasFunds ? () => setExpanded(isOpen ? null : r.key) : undefined}
+                      className={`hover:bg-slate-800/30 ${hasFunds ? "cursor-pointer" : ""} ${isOpen ? "bg-blue-50/40" : ""}`}
+                    >
                       <td className="px-4 py-3">
-                        <div className="mono font-semibold text-slate-100">{r.key}</div>
+                        <div className="flex items-center gap-1.5">
+                          {hasFunds && <ChevronDown className={`h-3.5 w-3.5 shrink-0 text-blue-500 transition-transform ${isOpen ? "rotate-180" : ""}`} />}
+                          <span className="mono font-semibold text-slate-100">{r.key}</span>
+                        </div>
                         <div className="text-[11px] text-slate-500">{r.peer?.company}</div>
                       </td>
                       <td className="px-3 py-3 text-right mono text-slate-300">{fmtPct(r.weight, { decimals: 1 })}</td>
@@ -242,14 +249,10 @@ export function PeerPositioning() {
                             {trend > 0 ? "▲" : "▼"} {pp(trend)} 1y
                           </div>
                         )}
-                        {funds && funds.count > 0 && (
-                          <button
-                            onClick={() => setExpanded(isOpen ? null : r.key)}
-                            className="ml-auto mt-0.5 flex items-center gap-0.5 text-[10px] font-medium text-blue-600 hover:underline"
-                          >
-                            {funds.count} fund{funds.count === 1 ? "" : "s"}
-                            <ChevronDown className={`h-2.5 w-2.5 transition-transform ${isOpen ? "rotate-180" : ""}`} />
-                          </button>
+                        {hasFunds && (
+                          <div className="mt-0.5 text-[10px] font-medium text-blue-600">
+                            {funds!.count} fund{funds!.count === 1 ? "" : "s"} · {isOpen ? "hide" : "view"}
+                          </div>
                         )}
                       </td>
                       <td className="px-3 py-3 text-right mono text-slate-300">{fmtPct(n0(r.o.institutional), { decimals: 1 })}</td>
