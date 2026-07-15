@@ -57,7 +57,7 @@
   {
    "name": "Vijay Kedia",
    "holdsNV": [],
-   "portfolioSize": 23
+   "portfolioSize": 24
   },
   {
    "name": "Nemish Shah",
@@ -148,25 +148,16 @@
    "sid": "SELA",
    "sector": "Energy",
    "ownership": {
-    "asOf": "2026-03-31",
+    "asOf": "2026-06-30",
     "promoter": 69.9,
-    "fii": 0.3,
-    "dii": 0.0,
+    "fii": 0.4,
+    "dii": 0.8,
     "mf": 0,
-    "retail": 17.8,
+    "retail": 17.0,
     "others": 11.9,
-    "institutional": 0.3
+    "institutional": 1.2
    },
    "history": [
-    {
-     "q": "2025-03-31",
-     "mf": 0,
-     "fii": 3.6,
-     "dii": 0.0,
-     "promoter": 30.5,
-     "retail": 38.1,
-     "others": 27.8
-    },
     {
      "q": "2025-06-30",
      "mf": 0,
@@ -210,6 +201,15 @@
      "dii": 0.0,
      "promoter": 69.9,
      "retail": 17.8,
+     "others": 11.9
+    },
+    {
+     "q": "2026-06-30",
+     "mf": 0,
+     "fii": 0.4,
+     "dii": 0.8,
+     "promoter": 69.9,
+     "retail": 17.0,
      "others": 11.9
     }
    ],
@@ -373,25 +373,16 @@
    "sid": "GMDC",
    "sector": "Materials",
    "ownership": {
-    "asOf": "2026-03-31",
+    "asOf": "2026-06-30",
     "promoter": 74,
-    "fii": 3.8,
-    "dii": 0.9,
+    "fii": 3.7,
+    "dii": 0.8,
     "mf": 0.5,
-    "retail": 15.4,
-    "others": 5.9,
-    "institutional": 4.7
+    "retail": 16.1,
+    "others": 5.4,
+    "institutional": 4.5
    },
    "history": [
-    {
-     "q": "2024-12-31",
-     "mf": 0.1,
-     "fii": 1.9,
-     "dii": 0.7,
-     "promoter": 74,
-     "retail": 18.9,
-     "others": 4.4
-    },
     {
      "q": "2025-03-31",
      "mf": 0.1,
@@ -436,6 +427,15 @@
      "promoter": 74,
      "retail": 15.4,
      "others": 5.9
+    },
+    {
+     "q": "2026-06-30",
+     "mf": 0.5,
+     "fii": 3.7,
+     "dii": 0.8,
+     "promoter": 74,
+     "retail": 16.1,
+     "others": 5.4
     }
    ],
    "investors": []
@@ -517,25 +517,16 @@
    "sid": "HALC",
    "sector": "Materials",
    "ownership": {
-    "asOf": "2026-03-31",
-    "promoter": 34.6,
-    "fii": 34.1,
-    "dii": 21.5,
-    "mf": 11.4,
+    "asOf": "2026-06-30",
+    "promoter": 34.7,
+    "fii": 35.6,
+    "dii": 19.9,
+    "mf": 10.1,
     "retail": 5.0,
     "others": 4.8,
-    "institutional": 55.6
+    "institutional": 55.5
    },
    "history": [
-    {
-     "q": "2024-12-31",
-     "mf": 13.3,
-     "fii": 31.7,
-     "dii": 24.6,
-     "promoter": 34.6,
-     "retail": 5.1,
-     "others": 3.9
-    },
     {
      "q": "2025-03-31",
      "mf": 13.3,
@@ -578,6 +569,15 @@
      "fii": 34.1,
      "dii": 21.5,
      "promoter": 34.6,
+     "retail": 5.0,
+     "others": 4.8
+    },
+    {
+     "q": "2026-06-30",
+     "mf": 10.1,
+     "fii": 35.6,
+     "dii": 19.9,
+     "promoter": 34.7,
      "retail": 5.0,
      "others": 4.8
     }
@@ -877,25 +877,16 @@
    "sid": "PGEL",
    "sector": "Information Technology",
    "ownership": {
-    "asOf": "2026-03-31",
+    "asOf": "2026-06-30",
     "promoter": 43.4,
-    "fii": 9.7,
-    "dii": 24.5,
-    "mf": 19.4,
-    "retail": 15.9,
-    "others": 6.5,
-    "institutional": 34.2
+    "fii": 9.9,
+    "dii": 23.9,
+    "mf": 18.6,
+    "retail": 15.8,
+    "others": 7.0,
+    "institutional": 33.8
    },
    "history": [
-    {
-     "q": "2024-12-31",
-     "mf": 10.5,
-     "fii": 10.3,
-     "dii": 16.2,
-     "promoter": 49.4,
-     "retail": 15.0,
-     "others": 9.2
-    },
     {
      "q": "2025-03-31",
      "mf": 11.2,
@@ -940,6 +931,15 @@
      "promoter": 43.4,
      "retail": 15.9,
      "others": 6.5
+    },
+    {
+     "q": "2026-06-30",
+     "mf": 18.6,
+     "fii": 9.9,
+     "dii": 23.9,
+     "promoter": 43.4,
+     "retail": 15.8,
+     "others": 7.0
     }
    ],
    "investors": []
